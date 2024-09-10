@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+
+package payment;
+
+service PaymentService {
+    rpc PaymentCreate (PaymentCreateRequest) returns (PaymentCreateResponse);
+}
+
+message PaymentCreateRequest {
+    string customer_id = 1;
+    Amount amount_details = 2;
+}
+
+message Amount {
+    int32 amount = 1;
+    string currency = 2;
+}
+
+message PaymentCreateResponse {
+    string status = 1;
+    int32 sum = 2; // sum of all payments
+}

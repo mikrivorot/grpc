@@ -6,7 +6,6 @@ export default function paymentCreate(call: ServerUnaryCall<pb.PaymentCreateRequ
     const response = new pb.PaymentCreateResponse()
         .setStatus(`Hello, ${call.request.getCustomerId()}`)
         .setSum(call.request.getAmountDetails()?.getAmount() as number);
-    ;
 
     callback(null, response);
 }

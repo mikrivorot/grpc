@@ -2,8 +2,8 @@
 
 ```
 npm i
-npm run unary:build
-npm run server
-npm run client
+npm run <grps type>:build
+npm run <grps type>:server
+npm run <grps type>:client
 
 ```

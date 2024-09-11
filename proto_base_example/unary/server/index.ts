@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
-import { PaymentServiceService, IPaymentServiceService } from '../build/payment_grpc_pb';
+import { PaymentServiceService } from '../build/payment_grpc_pb';
 import paymentCreate from './service';
 
 const address = 'localhost:3001'

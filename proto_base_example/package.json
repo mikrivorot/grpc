@@ -16,7 +16,13 @@
     "server:streaming:prepare": "rimraf server_streaming/build/*",
     "server:streaming:build": "npm run server:streaming:prepare && npm run server:streaming:generate:js && npm run server:streaming:generate:ts",
     "server:streaming:server": "ts-node server_streaming/server/index.ts",
-    "server:streaming:client": "ts-node server_streaming/client/index.ts"
+    "server:streaming:client": "ts-node server_streaming/client/index.ts",
+    "client:streaming:generate:js": "grpc_tools_node_protoc --js_out=import_style=commonjs:./client_streaming/build --grpc_out=grpc_js:./client_streaming/build --proto_path=./client_streaming/proto ./client_streaming/proto/*.proto",
+    "client:streaming:generate:ts": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:./client_streaming/build --proto_path=./client_streaming/proto ./client_streaming/proto/*.proto",
+    "client:streaming:prepare": "rimraf client_streaming/build/*",
+    "client:streaming:build": "npm run client:streaming:prepare && npm run client:streaming:generate:js && npm run client:streaming:generate:ts",
+    "client:streaming:server": "ts-node client_streaming/server/index.ts",
+    "client:streaming:client": "ts-node client_streaming/client/index.ts"
   },
   "author": "",
   "license": "ISC",

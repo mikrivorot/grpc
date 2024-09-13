@@ -7,7 +7,6 @@ async function main() {
     const client: PaymentServiceClient = new PaymentServiceClient('localhost:3001', credentials);
 
     createPaymentWithStatus(client);
-    // client.close();
 }
 
 async function createPaymentWithStatus(client: PaymentServiceClient) {

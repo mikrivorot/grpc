@@ -1,4 +1,3 @@
 node_modules
 generate
-unary/build/
-server_streaming/build/
+*/build/

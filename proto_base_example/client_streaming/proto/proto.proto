@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+import "payments.proto";
+
+service PaymentService {
+    rpc BulkPaymentCreate (stream BulkPaymentCreateRequest) returns (BulkPaymentCreateResponse);
+}

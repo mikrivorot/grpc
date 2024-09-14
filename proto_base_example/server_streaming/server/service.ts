@@ -1,10 +1,10 @@
-import { ServerWritableStream } from '@grpc/grpc-js';
+import { handleServerStreamingCall, ServerReadableStream, ServerWritableStream } from '@grpc/grpc-js';
 import { Status, PaymentCreateResponse, PaymentCreateRequest, RejectReasons } from '../build/payment_pb';
 
 export const Service = {
-    paymentCreateWithStatus: async (call: any, _: any) => {
+    paymentCreateWithStatus: async (call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) => {
         console.log('Payment Creation was involved');
-        const receivedAmount: number = call.request.getAmountDetails()?.getAmount()
+        const receivedAmount: number = call.request.getAmountDetails()?.getAmount() || 0;
         /**
          * asynchronously call bank and initiate a payment
          */

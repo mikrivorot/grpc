@@ -22,7 +22,13 @@
     "client:streaming:prepare": "rimraf client_streaming/build/*",
     "client:streaming:build": "npm run client:streaming:prepare && npm run client:streaming:generate:js && npm run client:streaming:generate:ts",
     "client:streaming:server": "ts-node client_streaming/server/index.ts",
-    "client:streaming:client": "ts-node client_streaming/client/index.ts"
+    "client:streaming:client": "ts-node client_streaming/client/index.ts",
+    "bidirectional:generate:js": "grpc_tools_node_protoc --js_out=import_style=commonjs:./bidirectional/build --grpc_out=grpc_js:./bidirectional/build --proto_path=./bidirectional/proto ./bidirectional/proto/*.proto",
+    "bidirectional:generate:ts": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:./bidirectional/build --proto_path=./bidirectional/proto ./bidirectional/proto/*.proto",
+    "bidirectional:prepare": "rimraf bidirectional/build/*",
+    "bidirectional:build": "npm run bidirectional:prepare && npm run bidirectional:generate:js && npm run bidirectional:generate:ts",
+    "bidirectional:server": "ts-node bidirectional/server/index.ts",
+    "bidirectional:client": "ts-node bidirectional/client/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -33,10 +39,12 @@
     "google-protobuf": "^3.21.4",
     "grpc_tools_node_protoc_ts": "^5.3.3",
     "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@connectrpc/protoc-gen-connect-es": "^1.4.0",
+    "@types/uuid": "^10.0.0",
     "grpc-tools": "^1.12.4",
     "ts-proto": "^2.0.3",
     "typescript": "^5.5.4"

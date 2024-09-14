@@ -8,6 +8,7 @@ message BulkPaymentCreateRequest {
     int32 amount = 3;
 }
 
-message PaymentCreateResponse {
+message BulkPaymentCreateResponse {
     Status status = 1;
+    string payment_id = 2;
 }

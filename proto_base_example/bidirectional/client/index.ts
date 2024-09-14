@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
-import { PaymentServiceClient, BulkPaymentCreateRequest, PaymentCreateResponse, Status } from '../proto'
+import { PaymentServiceClient, BulkPaymentCreateRequest, BulkPaymentCreateResponse, Status } from '../proto'
 
 async function main() {
     const credentials: grpc.ChannelCredentials = grpc.ChannelCredentials.createInsecure();
@@ -8,7 +8,7 @@ async function main() {
 }
 
 async function createBulkPayments(client: PaymentServiceClient) {
-    const call: grpc.ClientWritableStream<BulkPaymentCreateRequest> = client.bulkPaymentCreate(callbackFunction);
+    const stream: grpc.ClientDuplexStream<BulkPaymentCreateRequest, BulkPaymentCreateResponse> = client.bulkPaymentCreate();
 
     const bulkPayments: BulkPaymentCreateRequest.AsObject[] = [{
         payerId: 1,
@@ -20,7 +20,7 @@ async function createBulkPayments(client: PaymentServiceClient) {
         amount: 20,
     }, {
         payerId: 2,
-        payeeId: 1,
+        payeeId: 2,
         amount: 10,
     }
     ];
@@ -31,18 +31,12 @@ async function createBulkPayments(client: PaymentServiceClient) {
             .setAmount(payment.amount)
             .setPayeeId(payment.payeeId)
             .setPayerId(payment.payerId);
-        call.write(bulkPaymentRequest);
+        stream.write(bulkPaymentRequest);
     }
-    call.end();
-}
-
-function callbackFunction(error: grpc.ServiceError | null, response: PaymentCreateResponse) {
-    if (error) {
-        console.log(error);
-    } else {
-        const status = getKeyFromEnumByValue({ receivedValue: response.getStatus(), e: Status });
-        console.log(status);
-    }
+    stream.on('data', (response: BulkPaymentCreateResponse) => {
+        console.log(`Payment with payment id ${response.getPaymentId()}, ${getKeyFromEnumByValue({ receivedValue: response.getStatus(), e: Status })}`);
+    })
+    stream.end();
 }
 
 function getKeyFromEnumByValue({ receivedValue, e }: { receivedValue: number, e: any }) {

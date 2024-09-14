@@ -1,11 +1,13 @@
-import { ServerUnaryCall, UntypedServiceImplementation } from '@grpc/grpc-js';
-import { BulkPaymentCreateRequest, BulkPaymentCreateResponse, Status } from '../proto'
+import { ServerReadableStream } from '@grpc/grpc-js';
+import { BulkPaymentCreateRequest, PaymentCreateResponse, Status } from '../proto'
 const payeesInSystem = [1];
-export const Service: UntypedServiceImplementation = {
-    bulkPaymentCreate: async (call: ServerUnaryCall<BulkPaymentCreateRequest, BulkPaymentCreateResponse>, callback: any) => {
+export const Service = {
+    bulkPaymentCreate: async (call: ServerReadableStream<BulkPaymentCreateRequest, PaymentCreateResponse>, callback: any) => {
         let aggregatePayments: BulkPaymentCreateRequest.AsObject[] = [];
         call.on('data', (request: BulkPaymentCreateRequest) => {
+            console.log(`Payment with amount '${request.getAmount()}' received`);
             const payeeId: BulkPaymentCreateRequest.AsObject["payeeId"] = request.getPayeeId();
+
             if (!payeesInSystem.includes(payeeId)) {
                 console.log(`Unknown payee: ${payeeId}`);
             } else {
@@ -18,7 +20,7 @@ export const Service: UntypedServiceImplementation = {
         })
 
         call.on('end', () => {
-            const response = new BulkPaymentCreateResponse();
+            const response = new PaymentCreateResponse();
             if (aggregatePayments.length > 0) {
                 response.setStatus(Status.RECEIVED);
             } else {

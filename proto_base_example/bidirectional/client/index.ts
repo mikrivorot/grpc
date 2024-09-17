@@ -36,6 +36,10 @@ async function createBulkPayments(client: PaymentServiceClient) {
     stream.on('data', (response: BulkPaymentCreateResponse) => {
         console.log(`Payment with payment id ${response.getPaymentId()}, ${getKeyFromEnumByValue({ receivedValue: response.getStatus(), e: Status })}`);
     })
+    stream.on('error', function (e) {
+        console.log(`Error received: ${e.message}`);
+    })
+
     stream.end();
 }
 

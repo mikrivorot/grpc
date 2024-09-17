@@ -14,8 +14,6 @@ function main() {
     server.bindAsync(address, credentials, (error, _) => {
         if (error) {
             cleanup(server);
-        } else {
-            server.start();
         }
     })
 }

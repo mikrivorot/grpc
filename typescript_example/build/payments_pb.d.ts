@@ -69,8 +69,8 @@ export class PaymentCreateResponse extends jspb.Message {
     getCommentList(): Array<string>;
     setCommentList(value: Array<string>): PaymentCreateResponse;
     addComment(value: string, index?: number): string;
-    getId(): number;
-    setId(value: number): PaymentCreateResponse;
+    getId(): string;
+    setId(value: string): PaymentCreateResponse;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): PaymentCreateResponse.AsObject;
@@ -88,7 +88,7 @@ export namespace PaymentCreateResponse {
         reason: RejectReasons,
         receivedAmount: number,
         commentList: Array<string>,
-        id: number,
+        id: string,
     }
 }
 

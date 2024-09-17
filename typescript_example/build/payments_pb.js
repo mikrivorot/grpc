@@ -503,7 +503,7 @@ proto.payments.PaymentCreateResponse.toObject = function(includeInstance, msg) {
     reason: jspb.Message.getFieldWithDefault(msg, 2, 0),
     receivedAmount: jspb.Message.getFieldWithDefault(msg, 3, 0),
     commentList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
-    id: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    id: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -557,7 +557,7 @@ proto.payments.PaymentCreateResponse.deserializeBinaryFromReader = function(msg,
       msg.addComment(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
     default:
@@ -618,8 +618,8 @@ proto.payments.PaymentCreateResponse.serializeBinaryToWriter = function(message,
     );
   }
   f = message.getId();
-  if (f !== 0) {
-    writer.writeInt32(
+  if (f.length > 0) {
+    writer.writeString(
       5,
       f
     );
@@ -719,20 +719,20 @@ proto.payments.PaymentCreateResponse.prototype.clearCommentList = function() {
 
 
 /**
- * optional int32 id = 5;
- * @return {number}
+ * optional string id = 5;
+ * @return {string}
  */
 proto.payments.PaymentCreateResponse.prototype.getId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.payments.PaymentCreateResponse} returns this
  */
 proto.payments.PaymentCreateResponse.prototype.setId = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

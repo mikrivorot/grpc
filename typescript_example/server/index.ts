@@ -3,6 +3,7 @@ import { PaymentServiceService } from '../proto/index';
 import { paymentCreate } from './unary';
 import { paymentCreateWithSteps } from './server.streaming'
 import { orderPaymentCreate } from './client.streaming'
+import { bulkPaymentCreate } from './bidirectional';
 
 const address = 'localhost:3001'
 function main() {
@@ -12,7 +13,7 @@ function main() {
         cleanup(server);
     })
 
-    server.addService(PaymentServiceService, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate });
+    server.addService(PaymentServiceService, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate, bulkPaymentCreate });
     server.bindAsync(address, credentials, (error, _) => {
         if (error) {
             cleanup(server);

@@ -12,15 +12,31 @@ async function main() {
 
 async function createPayment(client: PaymentServiceClient) {
     try {
-        const request: PaymentCreateRequest = new PaymentCreateRequest();
-        request
+        const successfulRequest: PaymentCreateRequest = new PaymentCreateRequest();
+        successfulRequest
             .setCustomerId('111')
             .setAmountDetails(getPreparedPaymentAmountDetails({ amount: 1, currency: 'EUR' }));
 
         // client.paymentCreate(request, (error: grpc.ServiceError | null, response: PaymentCreateResponse) => {
-        client.paymentCreate(request, (error: any, response: PaymentCreateResponse) => {
+        client.paymentCreate(successfulRequest, (error: any, response: PaymentCreateResponse) => {
             if (error) {
                 console.log(`Error = ${error}`);
+            } else {
+                console.log(`Status is = ${response.getStatus()}`);
+                console.log(`Sum is = ${response.getSum()}`)
+            }
+        });
+
+
+        const failedRequest: PaymentCreateRequest = new PaymentCreateRequest();
+        failedRequest
+            .setCustomerId('111')
+            .setAmountDetails(getPreparedPaymentAmountDetails({ amount: -9, currency: 'EUR' }));
+
+        // client.paymentCreate(request, (error: grpc.ServiceError | null, response: PaymentCreateResponse) => {
+        client.paymentCreate(failedRequest, (error: grpc.ServiceError | null, response: PaymentCreateResponse) => {
+            if (error) {
+                console.log(`Error = ${error.message}`);
             } else {
                 console.log(`Status is = ${response.getStatus()}`);
                 console.log(`Sum is = ${response.getSum()}`)
@@ -33,8 +49,8 @@ async function createPayment(client: PaymentServiceClient) {
 
 function getPreparedPaymentAmountDetails({ amount, currency }: { amount: number, currency: string }): Amount {
     return new Amount()
-        .setAmount(1)
-        .setCurrency('EUR')
+        .setAmount(amount)
+        .setCurrency(currency)
 }
 
 main();

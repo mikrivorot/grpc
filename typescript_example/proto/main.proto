@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "payments.proto";
+
+service PaymentService {
+    rpc PaymentCreate (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
+    rpc PaymentCreateWithSteps (payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
+    rpc OrderPaymentCreate (stream payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
+    rpc BulkPaymentCreate (stream payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
+}

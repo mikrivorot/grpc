@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-enum Status {
-    RECEIVED = 0;
-    PROCESSING = 1;
-    FINISHED = 2;
-    REJECTED = 3;
-}

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package payments;
+
+enum Status {
+    RECEIVED = 0;
+    PROCESSING = 1;
+    FINISHED = 2;
+    REJECTED = 3;
+}
+
+enum RejectReasons {
+    NOT_SPECIFIED = 0;
+    NO_ANSWER = 1;
+    INSUFFICIENT_FUNDS = 2;
+    NO_PERMISSIONS = 3;
+}
+
+message PaymentCreateRequest {
+    int32 payer_id = 1;
+    int32 payee_id = 2;
+    Amount amount_details = 3;
+}
+
+message Amount {
+    int32 amount = 1;
+    string currency = 2;
+}
+
+message PaymentCreateResponse {
+    Status status = 1;
+    RejectReasons reason = 2;
+    int32 received_amount = 3;
+    repeated string comment = 4;
+    int32 id = 5;
+}

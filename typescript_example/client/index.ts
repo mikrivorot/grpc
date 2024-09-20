@@ -4,10 +4,28 @@ import { createSuccessfulPayment, createFailedPayment, deadline } from './unary'
 import { createFailedPaymentWithStep, createSuccessfulPaymentWithStep } from './server.streaming';
 import { orderPaymentCreate } from './client.streaming';
 import { bulkPaymentCreate } from './bidirectional';
+import fs from 'node:fs';
+import path from 'path';
 
 async function main() {
-    const credentials: grpc.ChannelCredentials = grpc.ChannelCredentials.createInsecure();
-    const client: PaymentServiceClient = new PaymentServiceClient('localhost:3001', credentials);
+
+    const options = {
+        checkServerIdentity: (a: any, b: any): any => {
+            debugger;
+            return null;
+        }
+    }
+    const certificates: { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } = readTlsCertificates();
+
+    const credentials: grpc.ChannelCredentials = certificates.rootCert ?
+        grpc.credentials.createSsl(certificates.rootCert, null, null, options) :
+        grpc.credentials.createInsecure();
+
+    // let client: PaymentServiceClient = new PaymentServiceClient('localhost:50051', credentials);
+    let client: PaymentServiceClient = new PaymentServiceClient('localhost:50051', credentials, {
+        'grpc.ssl_target_name_override': 'localhost',
+        'grpc.default_authority': 'localhost',
+    })
 
     // unary
     createSuccessfulPayment(client);
@@ -25,3 +43,16 @@ async function main() {
     bulkPaymentCreate(client)
 }
 main();
+
+
+function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } | {} {
+    try {
+        const certificatesFolder = path.join(__dirname, '..', 'certificates');
+        const rootCert = fs.readFileSync(path.join(certificatesFolder, 'ca.crt'));
+        const certChain = fs.readFileSync(path.join(certificatesFolder, 'server.crt'));
+        const privateKey = fs.readFileSync(path.join(certificatesFolder, 'server.pem'))
+        return { rootCert, certChain, privateKey };
+    } catch (e) {
+        return {};
+    }
+}

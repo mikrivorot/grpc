@@ -9,26 +9,21 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate:js": "grpc_tools_node_protoc --js_out=import_style=commonjs:./build --grpc_out=grpc_js:./build --proto_path=./proto ./proto/*.proto",
     "generate:ts": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:./build --proto_path=./proto ./proto/*.proto",
-    "prepare": "rimraf build/*",
-    "build": "npm run prepare && npm run generate:js && npm run generate:ts"
+    "cleanup": "rimraf build/*",
+    "generate:proto:ts": "npm run cleanup && npm run generate:js && npm run generate:ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "^1.11.1",
-    "@grpc/proto-loader": "^0.7.13",
-    "@types/google-protobuf": "^3.15.12",
-    "google-protobuf": "^3.21.4",
-    "grpc_tools_node_protoc_ts": "^5.3.3",
-    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "@grpc/grpc-js": "^1.11.3",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "grpc-tools": "^1.12.4",
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
-    "@connectrpc/protoc-gen-connect-es": "^1.4.0",
     "@types/uuid": "^10.0.0",
-    "grpc-tools": "^1.12.4",
-    "ts-proto": "^2.0.3",
     "typescript": "^5.5.4"
   }
 }

@@ -1,5 +1,5 @@
 import { ServerUnaryCall, status, ServerWritableStream } from '@grpc/grpc-js';
-import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto/index';
+import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
 
 function callBank(ms: number) { return new Promise((resolve, reject) => setTimeout(resolve, ms)) }
 

@@ -1,5 +1,5 @@
 import * as  grpc from '@grpc/grpc-js';
-import { PaymentServiceClient } from '../proto/index';
+import { PaymentServiceClient } from '../proto';
 import { createSuccessfulPayment, createFailedPayment, deadline } from './unary';
 import { createFailedPaymentWithStep, createSuccessfulPaymentWithStep } from './server.streaming';
 import { orderPaymentCreate } from './client.streaming';
@@ -10,18 +10,14 @@ import path from 'path';
 async function main() {
 
     const options = {
-        checkServerIdentity: (a: any, b: any): any => {
-            debugger;
-            return null;
-        }
+        checkServerIdentity: (a: any, b: any): any => undefined
     }
     const certificates: { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } = readTlsCertificates();
 
     const credentials: grpc.ChannelCredentials = certificates.rootCert ?
-        grpc.credentials.createSsl(certificates.rootCert, null, null, options) :
-        grpc.credentials.createInsecure();
+        grpc.ChannelCredentials.createSsl(certificates.rootCert, null, null, options) :
+        grpc.ChannelCredentials.createInsecure();
 
-    // let client: PaymentServiceClient = new PaymentServiceClient('localhost:50051', credentials);
     let client: PaymentServiceClient = new PaymentServiceClient('localhost:50051', credentials, {
         'grpc.ssl_target_name_override': 'localhost',
         'grpc.default_authority': 'localhost',

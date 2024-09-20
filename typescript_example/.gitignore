@@ -1,4 +1,3 @@
 node_modules
-generate
-build/
-certificates/*
+certificates
+build

@@ -1,5 +1,5 @@
 import { ServerUnaryCall, status, ServerWritableStream } from '@grpc/grpc-js';
-import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto/index';
+import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
 
 export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
     console.log('Payment Creation was involved');

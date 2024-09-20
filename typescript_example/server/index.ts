@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
-import { PaymentServiceService } from '../proto/index';
+import { PaymentServiceService, IPaymentServiceService } from '../proto';
 import { paymentCreate } from './unary';
 import { paymentCreateWithSteps } from './server.streaming'
 import { orderPaymentCreate } from './client.streaming'
@@ -22,7 +22,7 @@ function main() {
         cleanup(server);
     })
 
-    server.addService(PaymentServiceService, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate, bulkPaymentCreate });
+    server.addService(PaymentServiceService as grpc.ServiceDefinition<IPaymentServiceService>, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate, bulkPaymentCreate });
     server.bindAsync(address, credentials, (error, _) => {
         if (error) {
             cleanup(server);

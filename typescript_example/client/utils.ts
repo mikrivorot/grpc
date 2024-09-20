@@ -1,4 +1,4 @@
-import { Amount, PaymentCreateResponse } from '../proto/index';
+import { Amount, PaymentCreateResponse } from '../proto';
 import * as  grpc from '@grpc/grpc-js';
 
 export function getKeyFromEnumByValue({ receivedValue, e }: { receivedValue: number, e: any }) {

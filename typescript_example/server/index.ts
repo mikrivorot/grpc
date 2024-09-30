@@ -1,14 +1,17 @@
 import * as grpc from '@grpc/grpc-js';
 import { PaymentServiceService, IPaymentServiceService } from '../proto';
-import { paymentCreate } from './unary';
+import { paymentCreate, paymentSave } from './unary';
 import { paymentCreateWithSteps } from './server.streaming'
 import { orderPaymentCreate } from './client.streaming'
 import { bulkPaymentCreate } from './bidirectional';
 import fs from 'node:fs';
 import path from 'path';
+import { connect } from './db';
+import { MongoClient } from 'mongodb';
 
 const address = 'localhost:50051'
-function main() {
+
+async function main() {
     const server: grpc.Server = new grpc.Server();
     const certificates: { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } = readTlsCertificates();
     const credentials = certificates.privateKey && certificates.certChain ?
@@ -18,14 +21,24 @@ function main() {
         }], false)
         : grpc.ServerCredentials.createInsecure();
 
-    process.on('SIGINT', () => {
-        cleanup(server);
+    const client: MongoClient = await connect();
+    const db = client.db('payments');
+
+    const collections: any[] = await db.listCollections<{ name: string }>().toArray();
+
+    if (!collections && collections) {
+        throw Error();
+    }
+
+    process.on('SIGINT', async () => {
+        await cleanup(server, client);
     })
 
-    server.addService(PaymentServiceService as grpc.ServiceDefinition<IPaymentServiceService>, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate, bulkPaymentCreate });
-    server.bindAsync(address, credentials, (error, _) => {
+
+    server.addService(PaymentServiceService as grpc.ServiceDefinition<IPaymentServiceService>, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate, bulkPaymentCreate, paymentSave });
+    server.bindAsync(address, credentials, async (error, _) => {
         if (error) {
-            cleanup(server);
+            await cleanup(server, client);
         }
     })
 }
@@ -42,10 +55,11 @@ function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, private
     }
 }
 
-function cleanup(server: grpc.Server) {
+async function cleanup(server: grpc.Server, db?: MongoClient) {
     if (server) {
-        server.forceShutdown();
+        await db?.close();
+        // server.forceShutdown();
     }
 }
 
-main();
+main().catch(cleanup);

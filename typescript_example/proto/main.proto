@@ -3,6 +3,7 @@ syntax = "proto3";
 import "payments.proto";
 
 service PaymentService {
+    rpc PaymentSave (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
     rpc PaymentCreate (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
     rpc PaymentCreateWithSteps (payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
     rpc OrderPaymentCreate (stream payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);

@@ -1,4 +1,4 @@
-import { ServerUnaryCall, status, ServerWritableStream } from '@grpc/grpc-js';
+import { ServerWritableStream } from '@grpc/grpc-js';
 import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
 
 export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {

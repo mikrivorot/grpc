@@ -2,9 +2,10 @@
 
 ```
 npm i
-npm run <grps type>:build
-npm run <grps type>:server
-npm run <grps type>:client
+npm run generate:proto:ts
+npm run mongo:docker
+npm run server
+npm run client
 
 ```
 
@@ -47,4 +48,9 @@ openssl x509 -req -passin pass:1111 -days 365 -in server.csr -CA ca.crt -CAkey c
 ### Step 5: Convert the server certificate to .pem format (server.pem) - usable by gRPC
 ```
 openssl pkcs8 -topk8 -nocrypt -passin pass:1111 -in server.key -out server.pem
+```
+
+### Step 6: Access Mongo
+```
+docker exec -i -t <container_name> mongosh -u <username> -p <password>
 ```

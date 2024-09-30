@@ -1,5 +1,8 @@
 import { ServerUnaryCall, status, ServerWritableStream } from '@grpc/grpc-js';
-import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
+import { PaymentCreateRequest, PaymentCreateResponse, Status } from '../proto';
+import { connect } from './db';
+import { Collection } from 'mongodb';
+
 
 function callBank(ms: number) { return new Promise((resolve, reject) => setTimeout(resolve, ms)) }
 
@@ -36,5 +39,38 @@ export async function paymentCreate(call: ServerUnaryCall<PaymentCreateRequest, 
                 .setReceivedAmount(amount);
             callback(null, response);
         }
+    }
+}
+
+export async function paymentSave(call: ServerUnaryCall<PaymentCreateRequest, PaymentCreateResponse>, callback: any) {
+    console.log('Payment Save was involved');
+    const amount = call.request.getAmountDetails()?.getAmount() as number;
+    const currency = call.request.getAmountDetails()?.getCurrency() as string;
+
+    try {
+        const connection = await connect();
+        const database = connection.db('payments');
+
+        const collection = await database.collection('payments') as Collection;
+
+        const result = await collection.insertOne({
+            amount,
+            currency,
+            payer_id: call.request.getPayerId(),
+            payee_id: call.request.getPayeeId(),
+        });
+        const uuid = result.insertedId.toString();
+        const response = new PaymentCreateResponse()
+            .setStatus(Status.RECEIVED)
+            .setId(uuid)
+            .setCommentList(['Payment was successfully saved'])
+            .setReceivedAmount(amount);
+
+        callback(null, response);
+    } catch (e) {
+        callback({
+            code: status.INTERNAL,
+            message: 'Cannot save payment in DB'
+        }, null);
     }
 }

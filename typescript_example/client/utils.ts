@@ -20,5 +20,8 @@ export function handleUnaryCallback(error: grpc.ServiceError | null, response: P
     } else {
         console.log(`Status is = ${response.getStatus()}`);
         console.log(`Sum is = ${response.getReceivedAmount()}`)
+        if (response.getId()) {
+            console.log(`Generated UUID is = ${response.getId()}`);
+        }
     }
 }

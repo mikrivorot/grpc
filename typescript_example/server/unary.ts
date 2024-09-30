@@ -1,7 +1,7 @@
 import { ServerUnaryCall, status, ServerWritableStream } from '@grpc/grpc-js';
 import { PaymentCreateRequest, PaymentCreateResponse, Status } from '../proto';
 import { connect } from './db';
-import { Collection } from 'mongodb';
+import { Collection, Filter } from 'mongodb';
 
 
 function callBank(ms: number) { return new Promise((resolve, reject) => setTimeout(resolve, ms)) }
@@ -51,15 +51,30 @@ export async function paymentSave(call: ServerUnaryCall<PaymentCreateRequest, Pa
         const connection = await connect();
         const database = connection.db('payments');
 
-        const collection = await database.collection('payments') as Collection;
+        const collection = database.collection('payments') as Collection;
 
-        const result = await collection.insertOne({
+        // block with basic Mongo Collection operations
+        const inserted = await collection.insertOne({
             amount,
-            currency,
-            payer_id: call.request.getPayerId(),
-            payee_id: call.request.getPayeeId(),
+            currency
         });
-        const uuid = result.insertedId.toString();
+        let uuid = inserted.insertedId.toString();
+
+        // I skipped types creation for Documents
+        const founded = await collection.findOne({ _id: uuid } as Filter<any>);
+        if (!founded) {
+            throw new Error('find');
+        }
+
+        uuid = founded.insertedId.toString();
+
+        const updated = await collection.updateOne({ _id: uuid } as Filter<any>, {
+            $set: {
+                payer_id: call.request.getPayerId(),
+                payee_id: call.request.getPayeeId(),
+            }
+        })
+
         const response = new PaymentCreateResponse()
             .setStatus(Status.RECEIVED)
             .setId(uuid)
@@ -70,7 +85,7 @@ export async function paymentSave(call: ServerUnaryCall<PaymentCreateRequest, Pa
     } catch (e) {
         callback({
             code: status.INTERNAL,
-            message: 'Cannot save payment in DB'
+            message: `Cannot ${['save', 'find', 'update'].includes(e as string) || 'proceed with'} payment in DB`
         }, null);
     }
 }

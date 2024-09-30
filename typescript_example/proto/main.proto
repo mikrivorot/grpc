@@ -1,11 +1,13 @@
 syntax = "proto3";
 
 import "payments.proto";
+import "google/protobuf/empty.proto";
 
 service PaymentService {
     rpc PaymentSave (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
     rpc PaymentCreate (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
     rpc PaymentCreateWithSteps (payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
+    rpc PaymentsList (google.protobuf.Empty) returns (stream payments.PaymentCreateResponse);
     rpc OrderPaymentCreate (stream payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
     rpc BulkPaymentCreate (stream payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
 }

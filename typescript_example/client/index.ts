@@ -1,7 +1,7 @@
 import * as  grpc from '@grpc/grpc-js';
 import { PaymentServiceClient } from '../proto';
 import { createSuccessfulPayment, createFailedPayment, deadline, saveSuccessfulPayment } from './unary';
-import { createFailedPaymentWithStep, createSuccessfulPaymentWithStep } from './server.streaming';
+import { createFailedPaymentWithStep, createSuccessfulPaymentWithStep, paymentsList } from './server.streaming';
 import { orderPaymentCreate } from './client.streaming';
 import { bulkPaymentCreate } from './bidirectional';
 import fs from 'node:fs';
@@ -23,21 +23,22 @@ async function main() {
         'grpc.default_authority': 'localhost',
     })
 
-    // // unary
-    // createSuccessfulPayment(client);
+    // unary
+    createSuccessfulPayment(client);
     saveSuccessfulPayment(client);
-    // createFailedPayment(client);
-    // deadline(client);
+    createFailedPayment(client);
+    deadline(client);
 
-    // // server streaming
-    // createFailedPaymentWithStep(client);
-    // createSuccessfulPaymentWithStep(client);
+    // server streaming
+    createFailedPaymentWithStep(client);
+    createSuccessfulPaymentWithStep(client);
+    paymentsList(client);
 
-    // // client streaming
-    // orderPaymentCreate(client);
+    // client streaming
+    orderPaymentCreate(client);
 
     // bi-direction
-    // bulkPaymentCreate(client)
+    bulkPaymentCreate(client)
 }
 main();
 

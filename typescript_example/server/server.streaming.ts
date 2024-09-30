@@ -1,5 +1,8 @@
-import { ServerWritableStream } from '@grpc/grpc-js';
+import { ServerWritableStream, status } from '@grpc/grpc-js';
 import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
+import { connect } from './db';
+import { Collection, Filter } from 'mongodb';
+
 
 export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
     console.log('Payment Creation was involved');
@@ -37,4 +40,31 @@ export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentC
     }
 
     call.end();
+}
+
+
+export async function paymentsList(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
+    console.log('Payment List was involved');
+    try {
+        const connection = await connect();
+        const database = connection.db('payments');
+
+        const collection = database.collection('payments') as Collection;
+
+        const documents = await collection.find().toArray();
+
+        for (let document of documents) {
+            const response = new PaymentCreateResponse()
+                .setId(document._id.toString())
+                .setCommentList(['Retrieved from DB']);
+            call.write(response as PaymentCreateResponse);
+        }
+        call.end();
+        throw Error();
+    } catch (e) {
+        call.destroy({
+            name: 'error',
+            message: 'x'
+        });
+    }
 }

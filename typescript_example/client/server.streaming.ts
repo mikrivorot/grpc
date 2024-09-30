@@ -1,5 +1,6 @@
 import { PaymentCreateRequest, PaymentCreateResponse, PaymentServiceClient, Status, RejectReasons } from '../proto';
 import { getPreparedPaymentAmountDetails, getKeyFromEnumByValue } from './utils';
+import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 
 export async function createSuccessfulPaymentWithStep(client: PaymentServiceClient) {
     const successfulPaymentRequest: PaymentCreateRequest = new PaymentCreateRequest();
@@ -30,5 +31,16 @@ export async function createFailedPaymentWithStep(client: PaymentServiceClient) 
         const reason = getKeyFromEnumByValue({ receivedValue: res.getReason(), e: RejectReasons });
         const comment = res.getCommentList()?.join('. ');
         console.log(`${comment} (${status}/${reason})`);
+    });
+}
+
+export async function paymentsList(client: PaymentServiceClient) {
+    const call = client.paymentsList(new Empty());
+    call.on('data', (res: PaymentCreateResponse) => {
+        const comment = res.getCommentList()?.join('. ');
+        console.log(`Received "${comment}" for ${res.getId()} `);
+    });
+    call.on('end', (_1: any, _2: any) => {
+        console.log('Finished');
     });
 }

@@ -1,7 +1,7 @@
 import * as grpc from '@grpc/grpc-js';
 import { PaymentServiceService, IPaymentServiceService } from '../proto';
 import { paymentCreate, paymentSave } from './unary';
-import { paymentCreateWithSteps } from './server.streaming'
+import { paymentCreateWithSteps, paymentsList } from './server.streaming'
 import { orderPaymentCreate } from './client.streaming'
 import { bulkPaymentCreate } from './bidirectional';
 import fs from 'node:fs';
@@ -35,7 +35,14 @@ async function main() {
     })
 
 
-    server.addService(PaymentServiceService as grpc.ServiceDefinition<IPaymentServiceService>, { paymentCreate, paymentCreateWithSteps, orderPaymentCreate, bulkPaymentCreate, paymentSave });
+    server.addService(PaymentServiceService as grpc.ServiceDefinition<IPaymentServiceService>, {
+        paymentCreate,
+        paymentCreateWithSteps,
+        orderPaymentCreate,
+        bulkPaymentCreate,
+        paymentSave,
+        paymentsList
+    });
     server.bindAsync(address, credentials, async (error, _) => {
         if (error) {
             await cleanup(server, client);

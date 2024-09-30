@@ -3,6 +3,8 @@ import { getPreparedPaymentAmountDetails, getKeyFromEnumByValue } from './utils'
 import * as  grpc from '@grpc/grpc-js';
 
 export async function orderPaymentCreate(client: PaymentServiceClient) {
+    console.log("'orderPaymentCreate' was involved");
+
     const call: grpc.ClientWritableStream<PaymentCreateRequest> = client.orderPaymentCreate(callbackFunction);
 
     const bulkPayments: PaymentCreateRequest.AsObject[] = [{

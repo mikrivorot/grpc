@@ -14,14 +14,18 @@ export function getPreparedPaymentAmountDetails({ amount, currency }: { amount: 
         .setCurrency(currency)
 }
 
-export function handleUnaryCallback(error: grpc.ServiceError | null, response: PaymentCreateResponse) {
-    if (error) {
-        console.log(`Error = ${error}`);
-    } else {
-        console.log(`Status is = ${response.getStatus()}`);
-        console.log(`Sum is = ${response.getReceivedAmount()}`)
-        if (response.getId()) {
-            console.log(`Generated UUID is = ${response.getId()}`);
+export function handleUnaryCallback({ resolve, reject }: any = {}) {
+    return function x(error: grpc.ServiceError | null, response: PaymentCreateResponse) {
+        if (error) {
+            console.log(`Error = ${error}`);
+            reject();
+        } else {
+            console.log(`Status is = ${response.getStatus()}`);
+            console.log(`Sum is = ${response.getReceivedAmount()}`)
+            if (response.getId()) {
+                console.log(`Generated UUID is = ${response.getId()}`);
+            }
+            resolve();
         }
     }
 }

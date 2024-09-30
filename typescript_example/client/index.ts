@@ -23,11 +23,13 @@ async function main() {
         'grpc.default_authority': 'localhost',
     })
 
-    // unary
-    createSuccessfulPayment(client);
-    saveSuccessfulPayment(client);
-    createFailedPayment(client);
-    deadline(client);
+    // unary calls reworked to async (Promises with callbacks/calls inside)
+    await Promise.allSettled([
+        createSuccessfulPayment(client),
+        saveSuccessfulPayment(client),
+        createFailedPayment(client),
+        deadline(client)
+    ]);
 
     // server streaming
     createFailedPaymentWithStep(client);
@@ -38,7 +40,7 @@ async function main() {
     orderPaymentCreate(client);
 
     // bi-direction
-    bulkPaymentCreate(client)
+    await bulkPaymentCreate(client)
 }
 main();
 

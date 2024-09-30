@@ -3,6 +3,8 @@ import { getPreparedPaymentAmountDetails, getKeyFromEnumByValue } from './utils'
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 
 export async function createSuccessfulPaymentWithStep(client: PaymentServiceClient) {
+    console.log("'createSuccessfulPaymentWithStep' was involved");
+
     const successfulPaymentRequest: PaymentCreateRequest = new PaymentCreateRequest();
     successfulPaymentRequest
         .setPayeeId(1)
@@ -19,6 +21,8 @@ export async function createSuccessfulPaymentWithStep(client: PaymentServiceClie
 }
 
 export async function createFailedPaymentWithStep(client: PaymentServiceClient) {
+    console.log("'createFailedPaymentWithStep' was involved");
+
     const failedPaymentRequest: PaymentCreateRequest = new PaymentCreateRequest();
     failedPaymentRequest
         .setPayeeId(2)
@@ -35,6 +39,8 @@ export async function createFailedPaymentWithStep(client: PaymentServiceClient) 
 }
 
 export async function paymentsList(client: PaymentServiceClient) {
+    console.log("'paymentsList' was involved");
+
     const call = client.paymentsList(new Empty());
     call.on('data', (res: PaymentCreateResponse) => {
         const comment = res.getCommentList()?.join('. ');

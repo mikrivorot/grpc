@@ -65,7 +65,7 @@ function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, private
 async function cleanup(server: grpc.Server, db?: MongoClient) {
     if (server) {
         await db?.close();
-        // server.forceShutdown();
+        server.forceShutdown();
     }
 }
 

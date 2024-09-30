@@ -60,11 +60,10 @@ export async function paymentsList(call: ServerWritableStream<PaymentCreateReque
             call.write(response as PaymentCreateResponse);
         }
         call.end();
-        throw Error();
     } catch (e) {
         call.destroy({
             name: 'error',
-            message: 'x'
+            message: 'error'
         });
     }
 }

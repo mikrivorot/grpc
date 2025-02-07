@@ -1,7 +1,7 @@
 import { ServerWritableStream, status } from '@grpc/grpc-js';
 import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
 import { connect } from './db';
-import { Collection, Filter } from 'mongodb';
+import { Collection } from 'mongodb';
 
 
 export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
@@ -11,7 +11,7 @@ export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentC
      * asynchronously call bank and initiate a payment
      */
     const initialResponse: PaymentCreateResponse = new PaymentCreateResponse()
-        .setStatus(Status.COMMITTED)
+        .setStatus(status.COMMITTED)
         .setReceivedAmount(receivedAmount)
         .setCommentList(['Bank contacted', 'Transaction started']);
 
@@ -53,14 +53,14 @@ export async function paymentsList(call: ServerWritableStream<PaymentCreateReque
 
         const documents = await collection.find().toArray();
 
-        for (let document of documents) {
+        for (const document of documents) {
             const response = new PaymentCreateResponse()
                 .setId(document._id.toString())
                 .setCommentList(['Retrieved from DB']);
             call.write(response as PaymentCreateResponse);
         }
         call.end();
-    } catch (e) {
+    } catch {
         call.destroy({
             name: 'error',
             message: 'error'

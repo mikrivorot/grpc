@@ -12,7 +12,7 @@ export type Certificates = { rootCert?: Buffer, certChain?: Buffer, privateKey?:
 async function main() {
     const certificates: Certificates = readTlsCertificates();
     const clientCredentials: grpc.ChannelCredentials = getClientCredentials(certificates);
-    let client: TransactionsClient = getGrpcClient(clientCredentials);
+    const client: TransactionsClient = getGrpcClient(clientCredentials);
 
     // const x = await Promise.allSettled([
     //     createSuccessfulPayment(client),

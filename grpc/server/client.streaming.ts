@@ -3,7 +3,7 @@ import { PaymentCreateRequest, PaymentCreateResponse, Status } from '../proto'
 const payeesInSystem = [1];
 
 export async function orderPaymentCreate(call: ServerReadableStream<PaymentCreateRequest, PaymentCreateResponse>, callback: any) {
-    let aggregatePayments: PaymentCreateRequest.AsObject[] = [];
+    const aggregatePayments: PaymentCreateRequest.AsObject[] = [];
     let receivedAmount = 0;
     call.on('data', (request: PaymentCreateRequest) => {
         console.log(`Payment with amount '${request.getAmountDetails()?.getAmount()}' arrived`);

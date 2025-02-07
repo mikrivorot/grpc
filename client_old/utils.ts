@@ -2,8 +2,8 @@ import { Amount, PaymentCreateResponse } from '../grpc/proto';
 import * as  grpc from '@grpc/grpc-js';
 
 export function getKeyFromEnumByValue({ receivedValue, e }: { receivedValue: number, e: any }) {
-    for (let key in e) {
-        let value = e[key];
+    for (const key in e) {
+        const value = e[key];
         if (+value === receivedValue) return key;
     }
 }

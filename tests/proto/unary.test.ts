@@ -1,7 +1,8 @@
-mport * as grpc from '@grpc/grpc-js';
-import { startGrpcServer, stopGrpcServer, readTlsCertificates } from '../../server';
+ 
+import { startGrpcServer, stopGrpcServer } from '../../server';
 import { promisify } from 'util';
 import { MongoClient } from 'mongodb';
+import { getChannelCredentials, getGrpcClient } from '../utils';
 
 import { PaymentServiceClient, TransactionCommitRequest, Amount } from '../../grpc/proto';
 
@@ -12,25 +13,10 @@ let mongoClient: MongoClient;
 describe('gRPC unary server with MongoDB', () => {
     beforeAll(async () => {
         await startGrpcServer();
-
-        const options = {
-            checkServerIdentity: (a: any, b: any): any => undefined
-        }
-        const certificates: { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } = readTlsCertificates();
-
-        const credentials: grpc.ChannelCredentials = certificates.rootCert ?
-            grpc.ChannelCredentials.createSsl(certificates.rootCert, null, null, options) :
-            grpc.ChannelCredentials.createInsecure();
-
-        client = new PaymentServiceClient('localhost:50051', credentials, {
-            'grpc.ssl_target_name_override': 'localhost',
-            'grpc.default_authority': 'localhost',
-        })
+        const clientCredentials = getChannelCredentials();
+        const client = await getGrpcClient(clientCredentials);
 
         paymentCreateAsync = promisify(client.paymentCreate).bind(client);
-
-        mongoClient = new MongoClient(MONGO_URI);
-        await mongoClient.connect();
     });
 
     afterAll(async () => {
@@ -50,7 +36,6 @@ describe('gRPC unary server with MongoDB', () => {
                 .setCurrency('EUR'));
 
 
-        // @ts-ignore
         const response = await paymentCreateAsync(successfulRequest);
         expect(response.getStatus()).toBe(0);
         expect(response.getReason()).toBe(0);

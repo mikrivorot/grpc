@@ -1,9 +1,7 @@
-import { ServerUnaryCall, status, ServerWritableStream } from '@grpc/grpc-js';
+import { ServerUnaryCall, status } from '@grpc/grpc-js';
 import { TransactionCommitRequest, TransactionCommitResponse, Status } from '../proto';
-import { connect } from './db';
-import { Collection, Filter, ObjectId } from 'mongodb';
 
-function callThirdParty(ms: number) { return new Promise((resolve, reject) => setTimeout(resolve, ms)) }
+// function callThirdParty(ms: number) { return new Promise((resolve, reject) => setTimeout(resolve, ms)) }
 
 export async function transactionCommit(call: ServerUnaryCall<TransactionCommitRequest, TransactionCommitResponse>, callback: any) {
     const amount = call.request.getAmountDetails()?.getAmount() as number;

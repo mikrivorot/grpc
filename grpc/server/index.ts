@@ -4,10 +4,10 @@ import { transactionCommit } from './unary';
 import fs from 'node:fs';
 import path from 'path';
 import { connect as connectMongo, disconnect as disconnectMongo } from './db';
-import { MongoClient } from 'mongodb';
 import { promisify } from 'util';
 import * as dotenv from 'dotenv';
 dotenv.config();
+
 const address = process.env.GRPC_SERVER_ADDRESS || 'localhost:50051';
 
 if (!address) {
@@ -65,7 +65,7 @@ export function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, 
         const certChain = fs.readFileSync(path.join(certificatesFolder, 'server.crt'));
         const privateKey = fs.readFileSync(path.join(certificatesFolder, 'server.pem'))
         return { rootCert, certChain, privateKey };
-    } catch (e) {
+    } catch {
         return {};
     }
 }

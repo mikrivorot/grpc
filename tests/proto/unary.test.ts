@@ -1,44 +1,63 @@
- 
-import { startGrpcServer, stopGrpcServer } from '../../server';
+import { startGrpcServer, stopGrpcServer } from '../../grpc/server';
 import { promisify } from 'util';
 import { MongoClient } from 'mongodb';
-import { getChannelCredentials, getGrpcClient } from '../utils';
+import { getChannelCredentials, getGrpcClient, readTlsCertificates } from '../utils';
+import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../grpc/proto';
 
-import { PaymentServiceClient, TransactionCommitRequest, Amount } from '../../grpc/proto';
-
-let client: PaymentServiceClient;
-let paymentCreateAsync: (request: TransactionCommitRequest) => Promise<any>;
+let client: TransactionsClient;
+let transactionCommitAsync: (request: TransactionCommitRequest) => Promise<unknown>;
 let mongoClient: MongoClient;
 
-describe('gRPC unary server with MongoDB', () => {
+describe('gRPC unary server', () => {
     beforeAll(async () => {
         await startGrpcServer();
-        const clientCredentials = getChannelCredentials();
-        const client = await getGrpcClient(clientCredentials);
-
-        paymentCreateAsync = promisify(client.paymentCreate).bind(client);
+        const clientCredentials = getChannelCredentials(readTlsCertificates());
+        client = await getGrpcClient(clientCredentials);
+        transactionCommitAsync = promisify(client.transactionCommit).bind(client);
     });
 
     afterAll(async () => {
         client.close();
-        await mongoClient.db(DB_NAME).collection(COLLECTION_NAME).deleteMany({}); // Clean up test data
-        await mongoClient.close();
         await stopGrpcServer();
     });
 
-    it('should create a payment', async () => {
+    it('should commit transaction', async () => {
         const successfulRequest: TransactionCommitRequest = new TransactionCommitRequest();
         successfulRequest
-            .setPayeeId(1)
-            .setPayerId(10)
+            .setUserId(1)
             .setAmountDetails(new Amount()
                 .setAmount(1)
                 .setCurrency('EUR'));
 
-
-        const response = await paymentCreateAsync(successfulRequest);
+        const response = await transactionCommitAsync(successfulRequest) as TransactionCommitResponse;
         expect(response.getStatus()).toBe(0);
         expect(response.getReason()).toBe(0);
         expect(response.getReceivedAmount()).toBe(1);
+    });
+
+    it('should fail to commit transaction with invalid currency', async () => {
+        const failedRequest: TransactionCommitRequest = new TransactionCommitRequest();
+        failedRequest
+            .setUserId(1)
+            .setAmountDetails(new Amount()
+                .setAmount(0)
+                .setCurrency('EUR1'));
+
+        await expect(transactionCommitAsync(failedRequest)).rejects.toThrowError('Currency is not allowed');
+    });
+
+
+    it('should fail to commit transaction with negative amount', async () => {
+        const failedRequest: TransactionCommitRequest = new TransactionCommitRequest();
+        failedRequest
+            .setUserId(1)
+            .setAmountDetails(new Amount()
+                .setAmount(-1)
+                .setCurrency('EUR'));
+
+        const response = await transactionCommitAsync(failedRequest) as TransactionCommitResponse;
+        expect(response.getStatus()).toBe(Status.REJECTED);
+        expect(response.getReason()).toBe(RejectReasons.INVALID_ARGUMENT);
+        expect(response.getReceivedAmount()).toBe(-1);
     });
 });

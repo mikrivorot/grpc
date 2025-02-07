@@ -15,7 +15,7 @@ if (!address) {
 }
 
 const server: grpc.Server = prepareGrpcServer();
-
+export const tryShutdownAsync = promisify(server.tryShutdown).bind(server);
 export async function startGrpcServer() {
     const bindServerToAddressAsync = preparePromisifiedGrpcServerBind(server);
 
@@ -77,7 +77,6 @@ export async function cleanup() {
 
 export async function stopGrpcServer(): Promise<void> {
     try {
-        const tryShutdownAsync = promisify(server.tryShutdown).bind(server);
         await tryShutdownAsync?.();
         await disconnectMongo();
         console.log('gRPC server stopped');

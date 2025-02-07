@@ -10,7 +10,7 @@ export function bulkPaymentCreate(call: ServerDuplexStream<PaymentCreateRequest,
             const successfulResponse = new PaymentCreateResponse().setId(uuidv4()).setStatus(Status.COMMITTED);
             call.write(successfulResponse)
         } else {
-            const failedResponse = new PaymentCreateResponse().setId('N/A').setStatus(Status.REJECTED).setCommentList([`Payee ${request.getPayeeId()} not found in system`]);
+            const failedResponse = new PaymentCreateResponse().setId('N/A').setStatus(Status.REFUSED).setCommentList([`Payee ${request.getPayeeId()} not found in system`]);
             call.write(failedResponse);
         }
     })

@@ -36,6 +36,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
       'no-console': 'off',
       "@typescript-eslint/no-empty-object-type": "off",
+      "no-case-declarations": "off",
     },
   },
 ];

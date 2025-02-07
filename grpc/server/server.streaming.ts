@@ -1,69 +1,86 @@
 import { ServerWritableStream, status } from '@grpc/grpc-js';
-import { PaymentCreateRequest, PaymentCreateResponse, Status, RejectReasons } from '../proto';
-import { connect } from './db';
-import { Collection } from 'mongodb';
+import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from '../proto';
+// import { connect } from './db';
+// import { Collection } from 'mongodb';
+import { MAX_AMOUNT, MIN_AMOUNT } from './constants';
 
+export async function transactionCommitWithSteps(call: ServerWritableStream<TransactionCommitRequest, TransactionCommitResponse>) {
+    const receivedAmount: number | undefined = call.request.getAmountDetails()?.getAmount();
+    const currency: string | undefined = call.request.getAmountDetails()?.getCurrency();
 
-export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
-    console.log('Payment Creation was involved');
-    const receivedAmount: number = call.request.getAmountDetails()?.getAmount() || 0;
-    /**
-     * asynchronously call bank and initiate a payment
-     */
-    const initialResponse: PaymentCreateResponse = new PaymentCreateResponse()
-        .setStatus(status.COMMITTED)
-        .setReceivedAmount(receivedAmount)
-        .setCommentList(['Bank contacted', 'Transaction started']);
+    if (currency && !['EUR'].includes(currency)) {
+        call.destroy({
+            name: 'INVALID_ARGUMENT',
+            message: `Currency is not allowed, received ${receivedAmount} ${currency}`
+        });
+        call.end();
+        return;
+    }
+
+    const initialResponse: TransactionCommitResponse = new TransactionCommitResponse()
+        .setStatus(Status.PROCESSING)
+        .setReceivedAmount(receivedAmount as number)
+        .setCommentList(['Transaction started']);
 
     call.write(initialResponse);
 
-    const processingResponse: PaymentCreateResponse = new PaymentCreateResponse()
+    const processingResponse: TransactionCommitResponse = new TransactionCommitResponse()
         .setStatus(Status.PROCESSING)
-        .setReceivedAmount(call.request.getAmountDetails()?.getAmount() as number)
-        .setCommentList(['Payment in process']);
+        .setReceivedAmount(receivedAmount as number)
+        .setCommentList(['Transaction in process']);
 
     call.write(processingResponse);
 
-    if (receivedAmount > 10) {
-        const rejectedResponse: PaymentCreateResponse = new PaymentCreateResponse()
-            .setStatus(Status.REJECTED)
-            .setReceivedAmount(call.request.getAmountDetails()?.getAmount() as number)
-            .setReason(RejectReasons.INSUFFICIENT_FUNDS)
-            .setCommentList([`Received amount ${receivedAmount} $ is higher than 10$`, 'Payment rejected by bank']);
-        call.write(rejectedResponse);
-    } else {
-        const finishedResponse: PaymentCreateResponse = new PaymentCreateResponse()
-            .setStatus(Status.FINISHED)
-            .setReceivedAmount(call.request.getAmountDetails()?.getAmount() as number)
-            .setCommentList([`Received amount ${receivedAmount} accepted`]);
-        call.write(finishedResponse);
+    switch (receivedAmount) {
+        case MAX_AMOUNT:
+            const refusedMaxAmount: TransactionCommitResponse = new TransactionCommitResponse()
+                .setStatus(Status.REFUSED)
+                .setReceivedAmount(receivedAmount as number)
+                .setReason(RejectReasons.INVALID_ARGUMENT)
+                .setCommentList([`Received amount ${receivedAmount} $ is higher than ${MAX_AMOUNT}`, 'Transaction refused']);
+            call.write(refusedMaxAmount);
+            break;
+        case MIN_AMOUNT:
+            const refusedMinAmount: TransactionCommitResponse = new TransactionCommitResponse()
+                .setStatus(Status.REFUSED)
+                .setReceivedAmount(receivedAmount as number)
+                .setReason(RejectReasons.INVALID_ARGUMENT)
+                .setCommentList([`Received amount ${receivedAmount} $ is lower than ${MIN_AMOUNT}`, 'Transaction refused']);
+            call.write(refusedMinAmount);
+            break;
+        default:
+            const finishedResponse: TransactionCommitResponse = new TransactionCommitResponse()
+                .setStatus(Status.COMMITTED)
+                .setReceivedAmount(receivedAmount as number)
+                .setCommentList([`Received amount ${receivedAmount} accepted`]);
+            call.write(finishedResponse);
+            break;
     }
-
     call.end();
 }
 
 
-export async function paymentsList(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
-    console.log('Payment List was involved');
-    try {
-        const connection = await connect();
-        const database = connection.db('payments');
+// export async function paymentsList(call: ServerWritableStream<PaymentCreateRequest, PaymentCreateResponse>) {
+//     console.log('Payment List was involved');
+//     try {
+//         const connection = await connect();
+//         const database = connection.db('payments');
 
-        const collection = database.collection('payments') as Collection;
+//         const collection = database.collection('payments') as Collection;
 
-        const documents = await collection.find().toArray();
+//         const documents = await collection.find().toArray();
 
-        for (const document of documents) {
-            const response = new PaymentCreateResponse()
-                .setId(document._id.toString())
-                .setCommentList(['Retrieved from DB']);
-            call.write(response as PaymentCreateResponse);
-        }
-        call.end();
-    } catch {
-        call.destroy({
-            name: 'error',
-            message: 'error'
-        });
-    }
-}
+//         for (const document of documents) {
+//             const response = new PaymentCreateResponse()
+//                 .setId(document._id.toString())
+//                 .setCommentList(['Retrieved from DB']);
+//             call.write(response as PaymentCreateResponse);
+//         }
+//         call.end();
+//     } catch {
+//         call.destroy({
+//             name: 'error',
+//             message: 'error'
+//         });
+//     }
+// }

@@ -1,5 +1,6 @@
 import { ServerUnaryCall, status } from '@grpc/grpc-js';
 import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from '../proto';
+import { MIN_AMOUNT, MAX_AMOUNT } from './constants';
 
 // function callThirdParty(ms: number) { return new Promise((resolve, reject) => setTimeout(resolve, ms)) }
 
@@ -11,9 +12,15 @@ export async function transactionCommit(call: ServerUnaryCall<TransactionCommitR
             code: status.INVALID_ARGUMENT,
             message: `Currency is not allowed, received ${amount} ${currency}`
         });
-    } else if (amount < 0) {
+    } else if (amount <= MIN_AMOUNT) {
         const response = new TransactionCommitResponse()
-            .setStatus(Status.REJECTED)
+            .setStatus(Status.REFUSED)
+            .setReason(RejectReasons.INVALID_ARGUMENT)
+            .setReceivedAmount(amount);
+        callback(null, response);
+    } else if (amount > MAX_AMOUNT) {
+        const response = new TransactionCommitResponse()
+            .setStatus(Status.REFUSED)
             .setReason(RejectReasons.INVALID_ARGUMENT)
             .setReceivedAmount(amount);
         callback(null, response);

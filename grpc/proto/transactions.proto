@@ -5,7 +5,7 @@ package transactions;
 enum Status {
     COMMITTED = 0;
     PROCESSING = 1;
-    REJECTED = 2;
+    REFUSED = 2;
 }
 
 enum RejectReasons {

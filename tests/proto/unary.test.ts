@@ -56,7 +56,7 @@ describe('gRPC unary server', () => {
                 .setCurrency('EUR'));
 
         const response = await transactionCommitAsync(failedRequest) as TransactionCommitResponse;
-        expect(response.getStatus()).toBe(Status.REJECTED);
+        expect(response.getStatus()).toBe(Status.REFUSED);
         expect(response.getReason()).toBe(RejectReasons.INVALID_ARGUMENT);
         expect(response.getReceivedAmount()).toBe(-1);
     });

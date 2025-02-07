@@ -1,6 +1,7 @@
 import * as grpc from '@grpc/grpc-js';
 import { TransactionsService, ITransactionsServer } from '../proto';
 import { transactionCommit } from './unary';
+import { transactionCommitWithSteps } from './server.streaming';
 import fs from 'node:fs';
 import path from 'path';
 import { connect as connectMongo, disconnect as disconnectMongo } from './db';
@@ -88,7 +89,8 @@ export async function stopGrpcServer(): Promise<void> {
 function prepareGrpcServer(): grpc.Server {
     const server: grpc.Server = new grpc.Server();
     server.addService(TransactionsService as grpc.ServiceDefinition<ITransactionsServer>, {
-        transactionCommit
+        transactionCommit,
+        transactionCommitWithSteps
     });
     return server
 }

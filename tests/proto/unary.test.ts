@@ -3,7 +3,7 @@ import { startGrpcServer, stopGrpcServer, readTlsCertificates } from '../../serv
 import { promisify } from 'util';
 import { MongoClient } from 'mongodb';
 
-import { PaymentServiceClient, TransactionCommitRequest, Amount } from '../../proto';
+import { PaymentServiceClient, TransactionCommitRequest, Amount } from '../../grpc/proto';
 
 let client: PaymentServiceClient;
 let paymentCreateAsync: (request: TransactionCommitRequest) => Promise<any>;

@@ -1,5 +1,5 @@
 import * as  grpc from '@grpc/grpc-js';
-import { PaymentCreateRequest, PaymentServiceClient } from '../proto';
+import { PaymentCreateRequest, PaymentServiceClient } from '../grpc/proto';
 import { getPreparedPaymentAmountDetails, handleUnaryCallback } from './utils';
 
 export async function createSuccessfulPayment(client: PaymentServiceClient, allowedTimeout = 1000) {

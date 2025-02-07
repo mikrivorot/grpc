@@ -1,5 +1,5 @@
 import * as  grpc from '@grpc/grpc-js';
-import { TransactionsClient } from '../proto';
+import { TransactionsClient } from '../grpc/proto';
 import { createSuccessfulPayment, createFailedPayment, deadline, saveSuccessfulPayment } from './unary';
 import path from 'path';
 // import fs

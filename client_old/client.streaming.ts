@@ -1,4 +1,4 @@
-import { PaymentCreateRequest, PaymentCreateResponse, PaymentServiceClient, Status, RejectReasons } from '../proto';
+import { PaymentCreateRequest, PaymentCreateResponse, PaymentServiceClient, Status, RejectReasons } from '../grpc/proto';
 import { getPreparedPaymentAmountDetails, getKeyFromEnumByValue } from './utils';
 import * as  grpc from '@grpc/grpc-js';
 

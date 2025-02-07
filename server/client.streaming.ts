@@ -28,7 +28,7 @@ export async function orderPaymentCreate(call: ServerReadableStream<PaymentCreat
         const response = new PaymentCreateResponse();
         if (aggregatePayments.length > 0) {
 
-            response.setStatus(Status.RECEIVED);
+            response.setStatus(Status.COMMITTED);
             response.setReceivedAmount(receivedAmount);
         } else {
             response.setStatus(Status.REJECTED);

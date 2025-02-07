@@ -2,3 +2,5 @@ node_modules
 certificates
 build
 coverage/*
+.vscode
+.env

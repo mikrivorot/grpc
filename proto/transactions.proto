@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package transactions;
+
+enum Status {
+    COMMITTED = 0;
+    PROCESSING = 1;
+    REJECTED = 2;
+}
+
+enum RejectReasons {
+    NOT_SPECIFIED = 0;
+    INTERNAL_ERROR = 1;
+    INVALID_ARGUMENT = 2;
+}
+
+message TransactionCommitRequest {
+    int32 user_id = 1;
+    Amount amount_details = 2;
+}
+
+message Amount {
+    int32 amount = 1;
+    string currency = 2;
+}
+
+message TransactionCommitResponse {
+    Status status = 1;
+    optional RejectReasons reason = 2;
+    int32 received_amount = 3;
+    repeated string comment = 4;
+    string id = 5;
+}

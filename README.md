@@ -50,7 +50,7 @@ openssl x509 -req -passin pass:1111 -days 365 -in server.csr -CA ca.crt -CAkey c
 openssl pkcs8 -topk8 -nocrypt -passin pass:1111 -in server.key -out server.pem
 ```
 
-### Step 6: Access Mongo
+## Access Mongo
 ```
 docker exec -i -t <container_name> mongosh -u <username> -p <password>
 ```

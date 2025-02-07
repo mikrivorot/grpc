@@ -1,13 +1,12 @@
 syntax = "proto3";
 
-import "payments.proto";
+import "transactions.proto";
 import "google/protobuf/empty.proto";
 
-service PaymentService {
-    rpc PaymentSave (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
-    rpc PaymentCreate (payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
-    rpc PaymentCreateWithSteps (payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
-    rpc PaymentsList (google.protobuf.Empty) returns (stream payments.PaymentCreateResponse);
-    rpc OrderPaymentCreate (stream payments.PaymentCreateRequest) returns (payments.PaymentCreateResponse);
-    rpc BulkPaymentCreate (stream payments.PaymentCreateRequest) returns (stream payments.PaymentCreateResponse);
+service Transactions {
+    rpc TransactionCommit (transactions.TransactionCommitRequest) returns (transactions.TransactionCommitResponse);
+    rpc TransactionCommitWithSteps (transactions.TransactionCommitRequest) returns (stream transactions.TransactionCommitResponse);
+    rpc TransactionsList (google.protobuf.Empty) returns (stream transactions.TransactionCommitResponse);
+    rpc TransactionsCommit (stream transactions.TransactionCommitRequest) returns (transactions.TransactionCommitResponse);
+    rpc BulkTransactionsCommit (stream transactions.TransactionCommitRequest) returns (stream transactions.TransactionCommitResponse);
 }

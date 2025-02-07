@@ -7,28 +7,31 @@
     "server": "ts-node server/index.ts",
     "client": "ts-node client/index.ts",
     "mongo:docker": "docker compose up",
-    "test:jest:ts": "jest --config ./config/jest.config.js",
+    "test": "jest --config ./config/jest.config.js",
     "generate:js": "grpc_tools_node_protoc --js_out=import_style=commonjs:./build --grpc_out=grpc_js:./build --proto_path=./proto ./proto/*.proto",
     "generate:ts": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:./build --proto_path=./proto ./proto/*.proto",
-    "cleanup": "rimraf build/*",
+    "cleanup": "rimraf build && mkdirp build",
     "generate:proto:ts": "npm run cleanup && npm run generate:js && npm run generate:ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.11.3",
+    "dotenv": "^16.4.7",
     "grpc_tools_node_protoc_ts": "^5.3.3",
     "grpc-tools": "^1.12.4",
     "mongodb": "^6.9.0",
-    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.15.12",
     "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
     "@types/uuid": "^10.0.0",
     "jest": "^29.7.0",
+    "mkdirp": "^3.0.1",
+    "rimraf": "^6.0.1",
     "ts-jest": "^29.2.5",
     "typescript": "^5.5.4"
   }

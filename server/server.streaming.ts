@@ -11,7 +11,7 @@ export async function paymentCreateWithSteps(call: ServerWritableStream<PaymentC
      * asynchronously call bank and initiate a payment
      */
     const initialResponse: PaymentCreateResponse = new PaymentCreateResponse()
-        .setStatus(Status.RECEIVED)
+        .setStatus(Status.COMMITTED)
         .setReceivedAmount(receivedAmount)
         .setCommentList(['Bank contacted', 'Transaction started']);
 

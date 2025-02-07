@@ -1,0 +1,16 @@
+[project]
+name = "grpc"
+version = "0.1.0"
+description = "gRPC 'client' FastAPI application"
+authors = [
+    {name = "Margarita Finskaya", email = "m.i.krivorot.@gmail.com"},
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.8",
+    "grpcio>=1.70.0",
+    "grpcio-tools>=1.70.0",
+    "protobuf>=5.29.3",
+    "uvicorn>=0.34.0",
+]

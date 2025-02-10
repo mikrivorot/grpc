@@ -9,10 +9,11 @@
     },
     "include": [
         "grpc/**/*",
-        "client_old/**/*",
         "tests/**/*",
         "eslint.config.mjs",
-        "client_old/**/*",
         "config/jest.config.js",
     ],
+    "exclude": [
+        "client_old/**/*",
+    ]
 }

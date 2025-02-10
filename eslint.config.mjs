@@ -10,6 +10,7 @@ export default [
     ignores: [
       'config/jest.config.js',
       'node_modules/',
+      'client_old/',
       'dist/',
       'grpc/build/',
       'grpc/proto/',

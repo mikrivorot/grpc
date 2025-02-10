@@ -4,7 +4,10 @@
   "description": "Proto package with proto definitions to import into multiple microservices",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .  --config ./eslint.config.mjs",
+    "lint:eslint": "eslint .  --config ./eslint.config.mjs",
+    "lint:eslint:fix": "eslint .  --config ./eslint.config.mjs --fix",
+    "lint:tsconfig": "tsc --project tsconfig.json --noEmit",
+    "lint": "npm run lint:eslint && npm run lint:tsconfig",
     "server": "ts-node server/index.ts",
     "client": "ts-node client/index.ts",
     "mongo:docker": "docker compose up",

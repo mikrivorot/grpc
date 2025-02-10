@@ -11,7 +11,9 @@ export default [
       'config/jest.config.js',
       'node_modules/',
       'dist/',
-      'build/',
+      'grpc/build/',
+      'grpc/proto/',
+      'eslint.config.mjs'
     ],
   },
   js.configs.recommended,

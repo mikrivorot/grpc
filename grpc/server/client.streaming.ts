@@ -1,21 +1,23 @@
 import { ServerReadableStream } from '@grpc/grpc-js';
-import { PaymentCreateRequest, PaymentCreateResponse, Status } from '../proto'
-const payeesInSystem = [1];
+import { TransactionCommitRequest, TransactionsCommitResponse, Status } from '../proto'
+import { MAX_AMOUNT, MIN_AMOUNT } from './constants';
 
-export async function orderPaymentCreate(call: ServerReadableStream<PaymentCreateRequest, PaymentCreateResponse>, callback: any) {
-    const aggregatePayments: PaymentCreateRequest.AsObject[] = [];
-    let receivedAmount = 0;
-    call.on('data', (request: PaymentCreateRequest) => {
-        console.log(`Payment with amount '${request.getAmountDetails()?.getAmount()}' arrived`);
-        const payeeId: PaymentCreateRequest.AsObject["payeeId"] = request.getPayeeId();
-
-        if (!payeesInSystem.includes(payeeId)) {
-            console.log(`Unknown payee: ${payeeId}, payment with amount ${request.getAmountDetails()?.getAmount()} not accepted`);
+export async function transactionsCommit(call: ServerReadableStream<TransactionCommitRequest, TransactionsCommitResponse>, callback: any) {
+    const receivedTransactions: TransactionCommitRequest.AsObject[] = [];
+    const refusedTransactions: TransactionCommitRequest.AsObject[] = [];
+    call.on('data', (request: TransactionCommitRequest) => {
+        const amount: number = request.getAmountDetails()?.getAmount() as number;
+        if (amount === MAX_AMOUNT || amount === MIN_AMOUNT) {
+            refusedTransactions.push({
+                userId: request.getUserId(),
+                amountDetails: {
+                    amount: request.getAmountDetails()?.getAmount() as number,
+                    currency: request.getAmountDetails()?.getCurrency() as string
+                }
+            })
         } else {
-            receivedAmount += request.getAmountDetails()?.getAmount() as number;
-            aggregatePayments.push({
-                payeeId: request.getPayeeId(),
-                payerId: request.getPayerId(),
+            receivedTransactions.push({
+                userId: request.getUserId(),
                 amountDetails: {
                     amount: request.getAmountDetails()?.getAmount() as number,
                     currency: request.getAmountDetails()?.getCurrency() as string
@@ -25,13 +27,19 @@ export async function orderPaymentCreate(call: ServerReadableStream<PaymentCreat
     })
 
     call.on('end', () => {
-        const response = new PaymentCreateResponse();
-        if (aggregatePayments.length > 0) {
-
+        const response = new TransactionsCommitResponse();
+        if (receivedTransactions.length > 0) {
             response.setStatus(Status.COMMITTED);
-            response.setReceivedAmount(receivedAmount);
+            response.setTotalReceivedAmount(receivedTransactions.reduce((acc, curr: TransactionCommitRequest.AsObject) => {
+                return acc + (curr?.amountDetails?.amount || 0)
+            }, 0));
+            response.setTotalReceivedCount(receivedTransactions.length);
+            response.setTotalRefusedCount(refusedTransactions.length);
         } else {
-            response.setStatus(Status.REJECTED);
+            response.setStatus(Status.REFUSED);
+            response.setTotalReceivedAmount(0);
+            response.setTotalReceivedCount(0);
+            response.setTotalRefusedCount(refusedTransactions.length);
         }
 
         callback(null, response);

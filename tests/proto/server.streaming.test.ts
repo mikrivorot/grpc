@@ -5,7 +5,7 @@ import { MAX_AMOUNT, MIN_AMOUNT } from '../../grpc/server/constants';
 
 let client: TransactionsClient;
 
-describe('gRPC streaming server', () => {
+describe('gRPC server streaming', () => {
     beforeAll(async () => {
         await startGrpcServer();
         const clientCredentials = getChannelCredentials(readTlsCertificates());
@@ -18,19 +18,20 @@ describe('gRPC streaming server', () => {
     });
 
     it('should handle streaming transaction commits', async () => {
-        const request: TransactionCommitRequest = new TransactionCommitRequest();
-        request.setUserId(1).setAmountDetails(new Amount().setAmount(10).setCurrency('EUR'));
+        const request: TransactionCommitRequest = new TransactionCommitRequest()
+            .setUserId(1)
+            .setAmountDetails(new Amount().setAmount(10).setCurrency('EUR'));
 
         const stream = client.transactionCommitWithSteps(request);
 
         const responses: TransactionCommitResponse[] = await new Promise((resolve, reject) => {
-            const responses: TransactionCommitResponse[] = [];
+            const internalResponses: TransactionCommitResponse[] = [];
             stream.on('data', (response: TransactionCommitResponse) => {
-                responses.push(response);
+                internalResponses.push(response);
             });
 
             stream.on('end', () => {
-                resolve(responses);
+                resolve(internalResponses);
             });
 
             stream.on('error', (err) => {
@@ -41,11 +42,12 @@ describe('gRPC streaming server', () => {
         expect(responses.length).toBeGreaterThan(0);
         expect(responses[0].getStatus()).toBe(Status.PROCESSING);
         expect(responses[responses.length - 1].getStatus()).toBe(Status.COMMITTED);
-    }, 50000);
+    });
 
     it('should refuse transaction when amount equals MAX_AMOUNT', async () => {
-        const request: TransactionCommitRequest = new TransactionCommitRequest();
-        request.setUserId(1).setAmountDetails(new Amount().setAmount(MAX_AMOUNT).setCurrency('EUR'));
+        const request: TransactionCommitRequest = new TransactionCommitRequest()
+            .setUserId(1)
+            .setAmountDetails(new Amount().setAmount(MAX_AMOUNT).setCurrency('EUR'));
 
         const stream = client.transactionCommitWithSteps(request);
 
@@ -67,22 +69,23 @@ describe('gRPC streaming server', () => {
         expect(responses.length).toBeGreaterThan(0);
         expect(responses[0].getStatus()).toBe(Status.PROCESSING);
         expect(responses[responses.length - 1].getStatus()).toBe(Status.REFUSED);
-    }, 50000);
+    });
 
     it('should refuse transaction when amount equals MIN_AMOUNT', async () => {
-        const request: TransactionCommitRequest = new TransactionCommitRequest();
-        request.setUserId(1).setAmountDetails(new Amount().setAmount(MIN_AMOUNT).setCurrency('EUR'));
+        const request: TransactionCommitRequest = new TransactionCommitRequest()
+            .setUserId(1)
+            .setAmountDetails(new Amount().setAmount(MIN_AMOUNT).setCurrency('EUR'));
 
         const stream = client.transactionCommitWithSteps(request);
 
         const responses: TransactionCommitResponse[] = await new Promise((resolve, reject) => {
-            const responses: TransactionCommitResponse[] = [];
+            const internalResponses: TransactionCommitResponse[] = [];
             stream.on('data', (response: TransactionCommitResponse) => {
-                responses.push(response);
+                internalResponses.push(response);
             });
 
             stream.on('end', () => {
-                resolve(responses);
+                resolve(internalResponses);
             });
 
             stream.on('error', (err) => {
@@ -92,5 +95,5 @@ describe('gRPC streaming server', () => {
 
         expect(responses.length).toBeGreaterThan(0);
         expect(responses[responses.length - 1].getStatus()).toBe(Status.REFUSED);
-    }, 50000);
+    } /** add `, timeout` here to increase the timeout value e.g. for debug */);
 });

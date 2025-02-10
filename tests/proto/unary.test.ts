@@ -22,40 +22,47 @@ describe('gRPC unary server', () => {
     });
 
     it('should commit transaction', async () => {
-        const successfulRequest: TransactionCommitRequest = new TransactionCommitRequest();
-        successfulRequest
+        // 1. Prepare mock data
+        const successfulRequest: TransactionCommitRequest = new TransactionCommitRequest()
             .setUserId(1)
             .setAmountDetails(new Amount()
                 .setAmount(1)
                 .setCurrency('EUR'));
 
+        // 2. Start test execution
         const response = await transactionCommitAsync(successfulRequest) as TransactionCommitResponse;
+
+        // 
         expect(response.getStatus()).toBe(0);
         expect(response.getReason()).toBe(0);
         expect(response.getReceivedAmount()).toBe(1);
     });
 
     it('should fail to commit transaction with invalid currency', async () => {
-        const failedRequest: TransactionCommitRequest = new TransactionCommitRequest();
-        failedRequest
+        // 1. Prepare mock data
+        const failedRequest: TransactionCommitRequest = new TransactionCommitRequest()
             .setUserId(1)
             .setAmountDetails(new Amount()
                 .setAmount(0)
                 .setCurrency('EUR1'));
 
+        // 2 and 3. Start test execution, assert test results
         await expect(transactionCommitAsync(failedRequest)).rejects.toThrowError('Currency is not allowed');
     });
 
 
     it('should fail to commit transaction with negative amount', async () => {
-        const failedRequest: TransactionCommitRequest = new TransactionCommitRequest();
-        failedRequest
+        // 1. Prepare mock data
+        const failedRequest: TransactionCommitRequest = new TransactionCommitRequest()
             .setUserId(1)
             .setAmountDetails(new Amount()
                 .setAmount(-1)
                 .setCurrency('EUR'));
 
+        // 2. Start test execution
         const response = await transactionCommitAsync(failedRequest) as TransactionCommitResponse;
+
+        // 3. Assert test results
         expect(response.getStatus()).toBe(Status.REFUSED);
         expect(response.getReason()).toBe(RejectReasons.INVALID_ARGUMENT);
         expect(response.getReceivedAmount()).toBe(-1);

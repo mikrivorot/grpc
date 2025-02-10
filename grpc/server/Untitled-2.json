@@ -1,0 +1,340 @@
+{
+    "knownSymbols": {
+        "Certificates": [
+            {
+                "name": "Certificates",
+                "path": "/Users/margarita.krivorot/projects/grpc/client_old/index.ts",
+                "type": "type",
+                "isDefault": false
+            }
+        ],
+        "readTlsCertificates": [
+            {
+                "name": "readTlsCertificates",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/index.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "getChannelCredentials": [
+            {
+                "name": "getChannelCredentials",
+                "path": "/Users/margarita.krivorot/projects/grpc/tests/utils.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "getGrpcClient": [
+            {
+                "name": "getGrpcClient",
+                "path": "/Users/margarita.krivorot/projects/grpc/client_old/index.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "grpc": [
+            {
+                "name": "grpc",
+                "module": "@grpc/grpc-js",
+                "isDefault": true,
+                "asDefinition": "* as grpc"
+            }
+        ],
+        "path": [
+            {
+                "name": "path",
+                "module": "path",
+                "isDefault": true
+            }
+        ],
+        "fs": [
+            {
+                "name": "fs",
+                "module": "node:fs",
+                "isDefault": true
+            },
+            {
+                "name": "fs",
+                "module": "fs",
+                "isDefault": true,
+                "asDefinition": "* as fs"
+            }
+        ],
+        "promisify": [
+            {
+                "name": "promisify",
+                "module": "util",
+                "isDefault": false
+            }
+        ],
+        "MongoClient": [
+            {
+                "name": "MongoClient",
+                "module": "mongodb",
+                "isDefault": false
+            }
+        ],
+        "getClientCredentials": [
+            {
+                "name": "getClientCredentials",
+                "path": "/Users/margarita.krivorot/projects/grpc/client_old/index.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "dotenv": [
+            {
+                "name": "dotenv",
+                "module": "dotenv",
+                "isDefault": true,
+                "asDefinition": "* as dotenv"
+            }
+        ],
+        "async": [
+            {
+                "name": "async",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/client.streaming.ts",
+                "isDefault": false
+            }
+        ],
+        "getKeyFromEnumByValue": [
+            {
+                "name": "getKeyFromEnumByValue",
+                "path": "/Users/margarita.krivorot/projects/grpc/client_old/utils.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "getPreparedPaymentAmountDetails": [
+            {
+                "name": "getPreparedPaymentAmountDetails",
+                "path": "/Users/margarita.krivorot/projects/grpc/client_old/utils.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "handleUnaryCallback": [
+            {
+                "name": "handleUnaryCallback",
+                "path": "/Users/margarita.krivorot/projects/grpc/client_old/utils.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "Empty": [
+            {
+                "name": "Empty",
+                "module": "google-protobuf/google/protobuf/empty_pb",
+                "isDefault": false
+            }
+        ],
+        "TransactionCommitRequest": [
+            {
+                "name": "TransactionCommitRequest",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "class",
+                "isDefault": false
+            }
+        ],
+        "namespace": [
+            {
+                "name": "namespace",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "isDefault": false
+            }
+        ],
+        "AsObject": [
+            {
+                "name": "AsObject",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "type",
+                "isDefault": false
+            }
+        ],
+        "Amount": [
+            {
+                "name": "Amount",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "class",
+                "isDefault": false
+            }
+        ],
+        "TransactionCommitResponse": [
+            {
+                "name": "TransactionCommitResponse",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "class",
+                "isDefault": false
+            }
+        ],
+        "TransactionsCommitResponse": [
+            {
+                "name": "TransactionsCommitResponse",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "class",
+                "isDefault": false
+            }
+        ],
+        "Status": [
+            {
+                "name": "Status",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "enum",
+                "isDefault": false
+            }
+        ],
+        "RejectReasons": [
+            {
+                "name": "RejectReasons",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/transactions_pb.d.ts",
+                "type": "enum",
+                "isDefault": false
+            }
+        ],
+        "jspb": [
+            {
+                "name": "jspb",
+                "module": "google-protobuf",
+                "isDefault": true,
+                "asDefinition": "* as jspb"
+            }
+        ],
+        "TransactionsService": [
+            {
+                "name": "TransactionsService",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/main_grpc_pb.d.ts",
+                "type": "const",
+                "isDefault": false
+            }
+        ],
+        "ITransactionsServer": [
+            {
+                "name": "ITransactionsServer",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/main_grpc_pb.d.ts",
+                "type": "interface",
+                "isDefault": false
+            }
+        ],
+        "ITransactionsClient": [
+            {
+                "name": "ITransactionsClient",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/main_grpc_pb.d.ts",
+                "type": "interface",
+                "isDefault": false
+            }
+        ],
+        "TransactionsClient": [
+            {
+                "name": "TransactionsClient",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/build/main_grpc_pb.d.ts",
+                "type": "class",
+                "isDefault": false
+            }
+        ],
+        "google_protobuf_empty_pb": [
+            {
+                "name": "google_protobuf_empty_pb",
+                "module": "google-protobuf/google/protobuf/empty_pb",
+                "isDefault": true,
+                "asDefinition": "* as google_protobuf_empty_pb"
+            }
+        ],
+        "mongoClient": [
+            {
+                "name": "mongoClient",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/db.ts",
+                "type": "const",
+                "isDefault": false
+            }
+        ],
+        "tryShutdownAsync": [
+            {
+                "name": "tryShutdownAsync",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/index.ts",
+                "type": "const",
+                "isDefault": false
+            }
+        ],
+        "ALLOWED_CURRENCIES": [
+            {
+                "name": "ALLOWED_CURRENCIES",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/constants.ts",
+                "type": "const",
+                "isDefault": false
+            }
+        ],
+        "MAX_AMOUNT": [
+            {
+                "name": "MAX_AMOUNT",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/constants.ts",
+                "type": "const",
+                "isDefault": false
+            }
+        ],
+        "MIN_AMOUNT": [
+            {
+                "name": "MIN_AMOUNT",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/constants.ts",
+                "type": "const",
+                "isDefault": false
+            }
+        ],
+        "bulkPaymentCreate": [
+            {
+                "name": "bulkPaymentCreate",
+                "path": "/Users/margarita.krivorot/projects/grpc/grpc/server/bidirectional.ts",
+                "type": "function",
+                "isDefault": false
+            }
+        ],
+        "ServerDuplexStream": [
+            {
+                "name": "ServerDuplexStream",
+                "module": "@grpc/grpc-js",
+                "isDefault": false
+            }
+        ],
+        "v4 as uuidv4": [
+            {
+                "name": "v4 as uuidv4",
+                "module": "uuid",
+                "isDefault": false
+            }
+        ],
+        "ServerUnaryCall": [
+            {
+                "name": "ServerUnaryCall",
+                "module": "@grpc/grpc-js",
+                "isDefault": false
+            }
+        ],
+        "status": [
+            {
+                "name": "status",
+                "module": "@grpc/grpc-js",
+                "isDefault": false
+            }
+        ],
+        "ServerReadableStream": [
+            {
+                "name": "ServerReadableStream",
+                "module": "@grpc/grpc-js",
+                "isDefault": false
+            }
+        ],
+        "ServerWritableStream": [
+            {
+                "name": "ServerWritableStream",
+                "module": "@grpc/grpc-js",
+                "isDefault": false
+            }
+        ],
+        "Collection": [
+            {
+                "name": "Collection",
+                "module": "mongodb",
+                "isDefault": false
+            }
+        ]
+    }
+}

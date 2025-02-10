@@ -2,6 +2,7 @@ import * as grpc from '@grpc/grpc-js';
 import { TransactionsService, ITransactionsServer } from '../proto';
 import { transactionCommit } from './unary';
 import { transactionCommitWithSteps } from './server.streaming';
+import { transactionsCommit } from './client.streaming';
 import fs from 'node:fs';
 import path from 'path';
 import { connect as connectMongo, disconnect as disconnectMongo } from './db';
@@ -15,8 +16,9 @@ if (!address) {
     throw new Error('GRPC_SERVER_ADDRESS env variable is not set');
 }
 
-const server: grpc.Server = prepareGrpcServer();
+const server: grpc.Server = prepareGrpcServerWithRegisteredServices();
 export const tryShutdownAsync = promisify(server.tryShutdown).bind(server);
+
 export async function startGrpcServer() {
     const bindServerToAddressAsync = preparePromisifiedGrpcServerBind(server);
 
@@ -86,11 +88,12 @@ export async function stopGrpcServer(): Promise<void> {
     }
 }
 
-function prepareGrpcServer(): grpc.Server {
+function prepareGrpcServerWithRegisteredServices(): grpc.Server {
     const server: grpc.Server = new grpc.Server();
     server.addService(TransactionsService as grpc.ServiceDefinition<ITransactionsServer>, {
         transactionCommit,
-        transactionCommitWithSteps
+        transactionCommitWithSteps,
+        transactionsCommit
     });
     return server
 }

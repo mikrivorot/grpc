@@ -31,3 +31,11 @@ message TransactionCommitResponse {
     repeated string comment = 4;
     string id = 5;
 }
+
+message TransactionsCommitResponse {
+    Status status = 1;
+    int32 total_received_amount = 2;
+    int32 total_received_count = 3;
+    int32 total_refused_count = 4;
+    string id = 5;
+}

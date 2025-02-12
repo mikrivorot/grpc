@@ -1,4 +1,4 @@
-import { startGrpcServer, stopGrpcServer } from '../../grpc/server';
+import { startGrpcServer, stopGrpcServer } from '../../grpc/server/server';
 import { getChannelCredentials, getGrpcClient, readTlsCertificates } from '../utils';
 import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../grpc/proto';
 import { MAX_AMOUNT, MIN_AMOUNT } from '../../grpc/server/constants';

@@ -1,4 +1,4 @@
-import { startGrpcServer, stopGrpcServer } from '../../grpc/server';
+import { startGrpcServer, stopGrpcServer } from '../../grpc/server/server';
 import { promisify } from 'util';
 import { MongoClient } from 'mongodb';
 import { getChannelCredentials, getGrpcClient, readTlsCertificates } from '../utils';

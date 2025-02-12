@@ -1,6 +1,7 @@
 node_modules
 certificates
 build
+build_py
 coverage/*
 .vscode
 .env

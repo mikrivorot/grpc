@@ -1,41 +1,47 @@
-# main.py
-from fastapi import FastAPI, HTTPException
 import grpc
-from your_grpc_module import TransactionsStub, CreatePaymentRequest  # Replace with actual imports
-import os
+from fastapi import FastAPI, HTTPException
+from client import GRPCClient
 
 app = FastAPI()
+grpc_client = GRPCClient(host='localhost', port=50051)
 
-# Load environment variables from .env file
-from dotenv import load_dotenv
-load_dotenv()
-
-def get_grpc_client():
-    # Setup gRPC channel and client
-    address = os.getenv('GRPC_CLIENT_ADDRESS', 'localhost:50051')
-    creds = grpc.ssl_channel_credentials() if use_tls() else grpc.insecure_channel()
-    channel = grpc.secure_channel(address, creds) if use_tls() else grpc.insecure_channel(address)
-    
-    client = TransactionsStub(channel)
-    return client
-
-def use_tls():
-    # Determine if TLS should be used (implement logic here as needed)
-    return False
-
-async def create_successful_payment(client):
-    # Create and send a gRPC request
-    request = CreatePaymentRequest()  # Adjust request fields accordingly
+@app.post("/transaction/commit")
+async def transaction_commit(data: dict):
     try:
-        response = client.create_successful_payment(request)
-        return response
+        response = grpc_client.transaction_commit(data)
+        return {"response": response}
     except grpc.RpcError as e:
-        raise HTTPException(status_code=500, detail=f"gRPC error: {e.details()}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/createSuccessfulPayment")
-async def create_payment_endpoint():
-    client = get_grpc_client()
-    result = await create_successful_payment(client)
-    return {"success": True, "result": result}
+@app.get("/transaction/list")
+async def transactions_list():
+    try:
+        response_list = grpc_client.transactions_list()
+        return {"responses": response_list}
+    except grpc.RpcError as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-# Run using: uvicorn main:app --reload
+@app.post("/transaction/commit/with-steps")
+async def transaction_commit_with_steps(data: dict):
+    try:
+        response_iterator = grpc_client.transaction_commit_with_steps(data)
+        response_list = [response for response in response_iterator]
+        return {"responses": response_list}
+    except grpc.RpcError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/transactions/commit/stream")
+async def transactions_commit_stream(requests: list):
+    try:
+        response = grpc_client.transactions_commit(requests)
+        return {"response": response}
+    except grpc.RpcError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/transactions/bulk-commit")
+async def bulk_transactions_commit(requests: list):
+    try:
+        response_list = grpc_client.bulk_transactions_commit(requests)
+        return {"responses": response_list}
+    except grpc.RpcError as e:
+        raise HTTPException(status_code=500, detail=str(e))

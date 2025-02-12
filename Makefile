@@ -1,5 +1,5 @@
-PROTO_DIR=./proto
-OUT_DIR=./build_py
+PROTO_DIR=./grpc/proto
+OUT_DIR=./grpc/build_py
 
 generate:
 	mkdir -p $(OUT_DIR)

@@ -12,7 +12,7 @@ let client: TransactionsClient;
  * test fails due to timeout (done() is not called)
  */
 
-describe('TransactionsCommit Client Streaming Tests', () => {
+describe('gRPC Client Streaming Tests', () => {
     beforeAll(async () => {
         await startGrpcServer();
         const clientCredentials = getChannelCredentials(readTlsCertificates());

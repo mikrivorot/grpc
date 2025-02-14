@@ -9,12 +9,13 @@
     "lint:tsconfig": "tsc --project tsconfig.json --noEmit",
     "lint": "npm run lint:eslint && npm run lint:tsconfig",
     "test:server": "jest --config ./config/jest.config.js",
-    "server": "ts-node server/index.ts",
+    "start:server": "ts-node server/server.ts",
+    "start:client": "make start",
     "mongo:docker": "docker compose up",
     "generate:js": "grpc_tools_node_protoc --js_out=import_style=commonjs:./build_ts --grpc_out=grpc_js:./build_ts --proto_path=./proto ./proto/*.proto",
     "generate:ts": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:./build_ts --proto_path=./proto ./proto/*.proto",
     "cleanup": "rimraf ./build_ts && mkdirp ./build_ts",
-    "generate:proto:ts": "npm run cleanup && npm run generate:js && npm run generate:ts"
+    "generate:proto:ts": "npm run cleanup && npm run generate:js && npm run generate:ts && make generate"
   },
   "author": "Margarita",
   "license": "ISC",

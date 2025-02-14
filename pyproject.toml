@@ -3,7 +3,7 @@ name = "grpc"
 version = "0.1.0"
 description = "gRPC 'client' FastAPI application"
 authors = [
-    {name = "Margarita Finskaya", email = "m.i.krivorot.@gmail.com"},
+    {name = "Margarita F.", email = "m.i.krivorot@gmail.com"},
 ]
 readme = "README.md"
 requires-python = ">=3.12"
@@ -14,3 +14,10 @@ dependencies = [
     "protobuf>=5.29.3",
     "uvicorn>=0.34.0",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["grpc"]

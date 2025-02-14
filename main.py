@@ -1,6 +1,6 @@
 import grpc
 from fastapi import FastAPI, HTTPException
-from client import GRPCClient
+from .grpc.client.client import GRPCClient
 
 app = FastAPI()
 grpc_client = GRPCClient(host='localhost', port=50051)

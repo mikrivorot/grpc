@@ -1,7 +1,7 @@
-import { startGrpcServer, stopGrpcServer } from '../../grpc/server/server';
+import { startGrpcServer, stopGrpcServer } from '../../server/server';
 import { getChannelCredentials, getGrpcClient, readTlsCertificates } from '../utils';
-import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../grpc/proto';
-import { MAX_AMOUNT, MIN_AMOUNT } from '../../grpc/server/constants';
+import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../proto';
+import { MAX_AMOUNT, MIN_AMOUNT } from '../../server/constants';
 
 let client: TransactionsClient;
 

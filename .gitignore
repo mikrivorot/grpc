@@ -1,7 +1,16 @@
 node_modules
 certificates
-build
+build_ts
+build_js
 build_py
 coverage/*
 .vscode
 .env
+__pycache__/
+*.pyc
+
+# The .egg-info directory contains metadata about Python package 
+# that's generated during the build process. It's not meant to be version controlled. 
+*.egg-info/
+*.egg
+

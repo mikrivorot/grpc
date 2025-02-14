@@ -1,16 +1,16 @@
 
 import * as grpc from '@grpc/grpc-js';
 import { getGrpcClient, getChannelCredentials, readTlsCertificates } from '../utils';
-import { TransactionCommitRequest, TransactionCommitResponse, TransactionsClient, Amount, Status, RejectReasons } from '../../grpc/proto/index';
-import { startGrpcServer, stopGrpcServer } from '../../grpc/server/server';
-import { MAX_AMOUNT, MIN_AMOUNT } from '../../grpc/server/constants';
+import { TransactionCommitRequest, TransactionCommitResponse, TransactionsClient, Amount, Status, RejectReasons } from '../../proto/index';
+import { startGrpcServer, stopGrpcServer } from '../../server/server';
+import { MAX_AMOUNT, MIN_AMOUNT } from '../../server/constants';
 
 let client: TransactionsClient;
 
 /**
  * Test cases for bidirectional streaming
  */
-describe('gRPC Bidirectional Streaming Tests', () => {
+describe.only('gRPC Bidirectional Streaming Tests', () => {
     beforeAll(async () => {
         await startGrpcServer();
         const clientCredentials = getChannelCredentials(readTlsCertificates());
@@ -63,8 +63,8 @@ describe('gRPC Bidirectional Streaming Tests', () => {
             expect(mockCallbackFunctionForBidirectionalStreaming).toHaveBeenCalledTimes(transactionsRaw.length);
             const responsesFromServer: [response: TransactionCommitResponse][] = mockCallbackFunctionForBidirectionalStreaming.mock.calls;
 
-            const committedResponseFromServer = responsesFromServer.find(([call]: TransactionCommitResponse) => call.getReceivedAmount() === transactionsForRequest[0].getAmountDetails()?.getAmount())
-            const refusedResponseFromServer = responsesFromServer.find(([call]: TransactionCommitResponse) => call.getReceivedAmount() === transactionsForRequest[2].getAmountDetails()?.getAmount())
+            const committedResponseFromServer = responsesFromServer.find(([call]: [TransactionCommitResponse]) => call.getReceivedAmount() === transactionsForRequest[0].getAmountDetails()?.getAmount())
+            const refusedResponseFromServer = responsesFromServer.find(([call]: [TransactionCommitResponse]) => call.getReceivedAmount() === transactionsForRequest[2].getAmountDetails()?.getAmount())
 
             expect(committedResponseFromServer).toBeDefined();
             expect(refusedResponseFromServer).toBeDefined()

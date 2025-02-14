@@ -1,5 +1,7 @@
 ## Manage dependencies for 'client' service
 
+### Prepare 
+
 See [official documentation](https://docs.astral.sh/uv/getting-started/installation/#upgrading-uv)
 and [this Medium post](https://medium.com/@gnetkov/start-using-uv-python-package-manager-for-better-dependency-management-183e7e428760)
 
@@ -29,4 +31,10 @@ uv add uvicorn
 uv add grpcio
 uv add grpcio-tools
 uv add protobuf
+```
+
+### Install dependencies
+
+```bash
+uv pip install .
 ```

@@ -13,6 +13,7 @@
         "tests/**/*",
         "eslint.config.mjs",
         "config/jest.config.js",
+        "proto",
     ],
     "exclude": [
         "client_old/**/*",

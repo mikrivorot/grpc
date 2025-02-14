@@ -1,8 +1,8 @@
-import { startGrpcServer, stopGrpcServer } from '../../grpc/server/server';
+import { startGrpcServer, stopGrpcServer } from '../../server/server';
 import { promisify } from 'util';
 import { MongoClient } from 'mongodb';
 import { getChannelCredentials, getGrpcClient, readTlsCertificates } from '../utils';
-import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../grpc/proto';
+import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../proto';
 
 let client: TransactionsClient;
 let transactionCommitAsync: (request: TransactionCommitRequest) => Promise<unknown>;

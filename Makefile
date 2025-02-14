@@ -1,9 +1,17 @@
 PROTO_DIR=./proto
 OUT_DIR=./build_py
+CURRENT_DIR=$(shell pwd)
 
 generate:
 	mkdir -p $(OUT_DIR)
-	python -m grpc_tools.protoc -I $(PROTO_DIR) --python_out=$(OUT_DIR) --grpc_python_out=$(OUT_DIR) $(PROTO_DIR)/*.proto
+	python -m grpc_tools.protoc \
+		-I $(PROTO_DIR) \
+		--python_out=$(OUT_DIR) \
+		--grpc_python_out=$(OUT_DIR) \
+		$(PROTO_DIR)/*.proto
+	touch $(OUT_DIR)/__init__.py
+
+	
 
 start:
-	uvicorn main:app --reload
+	PYTHONPATH=$(CURRENT_DIR):$(CURRENT_DIR)/build_py uvicorn client.main:app --reload

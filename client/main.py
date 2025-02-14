@@ -1,6 +1,7 @@
+# main.py - FastAPI app that uses the gRPC client
 import grpc
 from fastapi import FastAPI, HTTPException
-from .grpc.client.client import GRPCClient
+from .grpc_client import GRPCClient
 
 app = FastAPI()
 grpc_client = GRPCClient(host='localhost', port=50051)

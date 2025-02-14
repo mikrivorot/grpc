@@ -13,8 +13,8 @@
 - Add nice diagrams (using mermaide?)
 
 
-[How to start gRPC server and run tests via constructing simple ts client](../docs/grpc_server.md)
+[How to start gRPC server and run tests via constructing simple ts client](./docs/grpc_server.md)
 
-[How to run gRPC client](../docs/grpc_client.md)
+[How to run gRPC client](./docs/grpc_client.md)
 
-[UV usage](../docs/uv.md)
+[UV usage](./docs/uv.md)

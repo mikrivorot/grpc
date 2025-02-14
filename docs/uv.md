@@ -36,5 +36,6 @@ uv add protobuf
 ### Install dependencies
 
 ```bash
+source .venv/bin/activate
 uv pip install .
 ```

@@ -11,7 +11,8 @@ generate:
 		$(PROTO_DIR)/*.proto
 	touch $(OUT_DIR)/__init__.py
 
-	
-
 start:
 	PYTHONPATH=$(CURRENT_DIR):$(CURRENT_DIR)/build_py uvicorn client.main:app --reload
+
+debug:
+	PYTHONPATH=$(CURRENT_DIR):$(CURRENT_DIR)/build_py PYTHONDEBUG=1 uvicorn client.main:app --reload --log-level debug --port 8000

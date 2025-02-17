@@ -14,7 +14,7 @@ uv init # init repo with python files
 We have basic files like `pyproject.toml`, `hello.py` and `.python-version` created in the root of the project.
 
 ```
-uv run hello.py # to create a virtual environment only
+uv venv # to create a virtual environment only
 ```
 
 Activate it:

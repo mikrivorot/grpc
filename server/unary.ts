@@ -27,7 +27,8 @@ export async function transactionCommit(call: ServerUnaryCall<TransactionCommitR
     } else {
         const response = new TransactionCommitResponse()
             .setStatus(Status.COMMITTED)
-            .setReceivedAmount(amount);
+            .setReceivedAmount(amount)
+            .setCommentList(['Transaction was successfully committed'])
         callback(null, response);
     }
 }

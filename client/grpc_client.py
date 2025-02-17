@@ -1,31 +1,30 @@
-# grpc_client.py - Dedicated gRPC client class
-
 import grpc
-from google.protobuf.empty_pb2 import Empty
+# from google.protobuf.empty_pb2 import Empty
 from build_py import main_pb2_grpc, transactions_pb2
+from .dto.transaction_dto import TransactionCommitRequestDTO, TransactionCommitResponseDTO
+from .mapper.transaction_mapper import TransactionMapper
 
 class GRPCClient:
     def __init__(self, host='localhost', port=50051):
-        # Create a channel to the gRPC server
-        self.channel = grpc.insecure_channel(f'{host}:{port}')
+        root_certificates = open('certificates/ca.crt', 'rb').read()
+        private_key = open('certificates/server.pem', 'rb').read()
+        certificate_chain = open('certificates/server.crt', 'rb').read()
+        credentials = grpc.ssl_channel_credentials(
+            root_certificates=root_certificates,
+            private_key=private_key,
+            certificate_chain=certificate_chain
+        )
+        
+        self.channel = grpc.secure_channel('localhost:50051', credentials)
         self.stub = main_pb2_grpc.TransactionsStub(self.channel)
+        self.mapper = TransactionMapper()
     
-    def transaction_commit(self, transaction_data):
-        request = transactions_pb2.TransactionCommitRequest(**transaction_data)
-        return self.stub.TransactionCommit(request)
-    
-    def transaction_commit_with_steps(self, transaction_data):
-        request = transactions_pb2.TransactionCommitRequest(**transaction_data)
-        return self.stub.TransactionCommitWithSteps(request)
-    
-    def transactions_list(self):
-        response_iterator = self.stub.TransactionsList(Empty())
-        return [response for response in response_iterator]
-    
-    def transactions_commit(self, requests):
-        request_iterator = (transactions_pb2.TransactionCommitRequest(**data) for data in requests)
-        return self.stub.TransactionsCommit(request_iterator)
-    
-    def bulk_transactions_commit(self, requests):
-        request_iterator = (transactions_pb2.TransactionCommitRequest(**data) for data in requests)
-        return self.stub.BulkTransactionsCommit(request_iterator)
+    def transaction_commit(
+        self, 
+        transaction_data: TransactionCommitRequestDTO
+    ) -> TransactionCommitResponseDTO:
+        grpc_request: transactions_pb2.TransactionCommitRequest = self.mapper.to_grpc_request(transaction_data)
+        
+        grpc_response: transactions_pb2.TransactionCommitResponse = self.stub.TransactionCommit(grpc_request)
+        
+        return self.mapper.from_grpc_response(grpc_response)

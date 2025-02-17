@@ -1,6 +1,7 @@
-https://rsbh.dev/blogs/grpc-with-nodejs-typescript
+## Problem #1: wrong gRPC import in generated ts files
 
-## Problem 
+https://rsbh.dev/blogs/grpc-with-nodejs-typescript just an article about gRPC with NodeJS and TypeScript.
+
 In *build/payment_grpc_pb.d.ts* uses `grpc` instead of `@grpc/grpc-js`
 ```
 import * as grpc from "grpc";
@@ -22,3 +23,32 @@ Solution and documentation here: [What grpc_tools_node_protoc_ts changed](https:
 
 We need to specify via parameter `--ts_out=`**grpc_js**:`./build` instead of `--ts_out=./build`
 
+## Problem #2 - incompatible protobuf versions
+`Detected incompatible Protobuf Gencode/Runtime versions when loading transactions.proto: gencode 5.29.0 runtime 5.28.0.`
+
+Weird:
+
+```toml
+...
+# pyproject.toml
+ "protobuf>=5.29.3",
+...
+```
+
+```bash
+pip show protobuf
+# Output (related to global installation on python level)
+# Name: protobuf
+# Version: 5.28.0
+# Summary: 
+# Home-page: https://developers.google.com/protocol-buffers/
+# Author: protobuf@googlegroups.com
+# Author-email: protobuf@googlegroups.com
+# License: 3-Clause BSD License
+```
+
+I fixed it by upgrading `protobuf` to `5.29.0` globally
+
+```bash
+pip install protobuf==5.29.0
+```

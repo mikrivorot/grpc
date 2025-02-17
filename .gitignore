@@ -1,11 +1,13 @@
 node_modules
 certificates
+build
 build_ts
 build_js
 build_py
 coverage/*
 .vscode
 .env
+.venv
 __pycache__/
 *.pyc
 

@@ -1,6 +1,11 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import List
 
+# TODO
+# status - enum?
+# message = type
+
+
 class TransactionCommitRequestDTO(BaseModel):
     amount: int = Field(
         ...,
@@ -27,5 +32,13 @@ class TransactionCommitRequestDTO(BaseModel):
         return v.upper()
 
 class TransactionCommitResponseDTO(BaseModel):
-    status: str = Field(..., example="success")
-    message: List[str] = Field(..., example=["Transaction committed successfully", "Done"])
+    status: str = Field(..., example="COMMITTED")
+    message: List[str] = Field(..., example=["Transaction committed successfully"])
+    
+
+class TransactionsRefusedResponseDTO(TransactionCommitResponseDTO):
+    refused_transactions: int = Field(..., example=10, description="Total amount of refused transactions") 
+    
+
+class TransactionsCommitResponseDTO(TransactionsRefusedResponseDTO):
+    transferred_amount: int = Field(..., example=10, description="Total sum of successfully committed transactions") 

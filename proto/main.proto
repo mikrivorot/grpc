@@ -4,9 +4,9 @@ import "transactions.proto";
 import "google/protobuf/empty.proto";
 
 service Transactions {
-    rpc TransactionCommit (transactions.TransactionCommitRequest) returns (transactions.TransactionCommitResponse);
-    rpc TransactionCommitWithSteps (transactions.TransactionCommitRequest) returns (stream transactions.TransactionCommitResponse);
-    rpc TransactionsList (google.protobuf.Empty) returns (stream transactions.TransactionCommitResponse);
-    rpc TransactionsCommit (stream transactions.TransactionCommitRequest) returns (transactions.TransactionsCommitResponse);
-    rpc BulkTransactionsCommit (stream transactions.TransactionCommitRequest) returns (stream transactions.TransactionCommitResponse);
+    rpc TransactionCommit (transactions.TransactionCommitRequest) returns (transactions.TransactionCommitResponse); // unary
+    rpc TransactionCommitWithSteps (transactions.TransactionCommitRequest) returns (stream transactions.TransactionCommitResponse); // server streaming
+    // rpc TransactionsList (google.protobuf.Empty) returns (stream transactions.TransactionCommitResponse); // server streaming 
+    rpc TransactionsCommit (stream transactions.TransactionCommitRequest) returns (transactions.TransactionsCommitResponse); // client streaming
+    rpc BulkTransactionsCommit (stream transactions.TransactionCommitRequest) returns (stream transactions.TransactionCommitResponse); // bidirectional
 }

@@ -29,7 +29,7 @@ export function getChannelCredentials(certificates?: Certificates): grpc.Channel
 }
 
 export function getGrpcClient(credentials: grpc.ChannelCredentials): TransactionsClient {
-    return new TransactionsClient(process.env.GRPC_CLIENT_ADDRESS || 'localhost:50051', credentials, {
+    return new TransactionsClient(process.env.GRPC_SERVER_ADDRESS || 'localhost:50051', credentials, {
         'grpc.ssl_target_name_override': 'localhost',
         'grpc.default_authority': 'localhost',
     })

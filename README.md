@@ -10,7 +10,8 @@
     - [DONE]: client method(s) for TransactionCommitWithSteps (maybe a flag in headers?)
     - [DONE]: client method(s) for TransactionsCommit
     - [DONE]: client method(s) for BulkTransactionsCommit
-- Add integration tests for whole project (involving both client and server)
+- [DONE] Add integration tests for whole project (involving both client and server)
+- Addusage of env variables in client and server
 - Remove Mongo DB usage (replace with assumptions like /** expect this to be done */)
 - Add nice diagrams (using mermaide?)
 - Finish with README.md files: (1) explain the purpose, (2) explain gRPC server, (3) explain gRPC client

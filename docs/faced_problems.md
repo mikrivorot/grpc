@@ -119,3 +119,8 @@ openssl pkcs8 -topk8 -nocrypt -passin pass:1111 -in server.key -out server.pem
 ```
 docker exec -i -t <container_name> mongosh -u <username> -p <password>
 ```
+
+
+#### [IN PROGRESS] Problem #6 - outdated pydantic
+
+> Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'example'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.10/migration

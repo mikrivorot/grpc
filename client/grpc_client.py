@@ -1,25 +1,36 @@
 import grpc
-# from google.protobuf.empty_pb2 import Empty <- later add for comments
+# from google.protobuf.empty_pb2 import Empty <- later add for nicer comments mapping
 from build_py import main_pb2_grpc, transactions_pb2
 from .dto.transaction_dto import TransactionCommitRequestDTO, TransactionCommitResponseDTO, TransactionsCommitResponseDTO
 from .mapper.transaction_mapper import TransactionMapper
-from typing import Iterator, List
+from typing import List
+from dotenv import load_dotenv
+import os
 
 class GRPCClient:
-    def __init__(self, host='localhost', port=50051): #todo params
-        root_certificates = open('certificates/ca.crt', 'rb').read()
-        private_key = open('certificates/server.pem', 'rb').read()
-        certificate_chain = open('certificates/server.crt', 'rb').read()
+    def __init__(self):
+        self.channel = None
+        self.stub = None
+        self.mapper = TransactionMapper()
+        self.setup_connection()
+        
+    def setup_connection(self):
+        load_dotenv()
+        
+        root_certificates = open(f'{os.getenv("ROOT_CERTIFICATE_PATH")}', 'rb').read()
+        private_key = open(f'{os.getenv("SERVER_PRIVATE_KEY_PATH")}', 'rb').read()
+        certificate_chain = open(f'{os.getenv("SERVER_CERTIFICATE_PATH")}', 'rb').read()
         credentials = grpc.ssl_channel_credentials(
             root_certificates=root_certificates,
             private_key=private_key,
             certificate_chain=certificate_chain
         )
         
-        self.channel = grpc.secure_channel('localhost:50051', credentials)
+        address = os.getenv("GRPC_SERVER_ADDRESS")
+        
+        self.channel = grpc.secure_channel(f'{address}', credentials)
         self.stub = main_pb2_grpc.TransactionsStub(self.channel)
-        self.mapper = TransactionMapper()
-    
+        
     def transaction_commit(
         self, 
         transaction_data: TransactionCommitRequestDTO

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Body, Query
+from fastapi import APIRouter, HTTPException, Body, Query, Depends
 import grpc
 from ..grpc_client import GRPCClient
 from ..dto.transaction_dto import TransactionCommitRequestDTO, TransactionCommitResponseDTO, TransactionsCommitResponseDTO
@@ -10,8 +10,14 @@ router = APIRouter(
     tags=["Transactions"]
 )
 
-grpc_client = GRPCClient(host='localhost', port=50051)
-
+def get_grpc_client():
+    client = GRPCClient()
+    try:
+        yield client
+    finally:
+        if client.channel:
+            client.channel.close()
+            
 # unary + server streaming
 @router.post("/commit", 
     response_model= APIResponse[Union[TransactionCommitResponseDTO, List[TransactionCommitResponseDTO]]],
@@ -27,7 +33,8 @@ async def transaction_commit(
     transaction: TransactionCommitRequestDTO = Body(
         ...,
         description="Transaction details to commit"
-    )
+    ),
+    grpc_client: GRPCClient = Depends(get_grpc_client)
 ) -> APIResponse[Union[TransactionCommitResponseDTO, List[TransactionCommitResponseDTO]]]:
     try:
         if with_steps:
@@ -61,7 +68,8 @@ async def transactions_commit(
     transactions: List[TransactionCommitRequestDTO] = Body(
         ...,
         description="Array of transactions to commit"
-    )
+    ),
+    grpc_client: GRPCClient = Depends(get_grpc_client)
 ) -> APIResponse[Union[TransactionsCommitResponseDTO, List[TransactionCommitResponseDTO]]]:
     try:
         if response_per_request:

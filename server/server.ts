@@ -6,7 +6,6 @@ import { transactionsCommit } from './client.streaming';
 import { bulkTransactionsCommit } from './bidirectional';
 import fs from 'node:fs';
 import path from 'path';
-import { connect as connectMongo, disconnect as disconnectMongo } from './db';
 import { promisify } from 'util';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -30,26 +29,17 @@ export async function startGrpcServer() {
     try {
         const credentials: grpc.ServerCredentials = gerServerCredentials();
         await bindServerToAddressAsync(address, credentials);
-        console.log(`Server started on ${address}`);
+        console.debug(`Server started on ${address}`);
     } catch (e) {
         console.error(`Cannot start gRPC server: ` + e)
         process.exit(1);
     }
 }
 
-export async function startDB() {
-    try {
-        await connectMongo();
-        console.log(`Connected to DB`);
-    } catch (e) {
-        console.error(`Cannot open DB connection due to error: ` + e)
-        process.exit(1);
-    }
-}
-
 /**
- * The function `gerServerCredentials` returns gRPC server credentials based on TLS certificates if
- * available, otherwise it creates insecure credentials.
+ * The function `gerServerCredentials` returns gRPC server credentials based on TLS certificates 
+ * if available, 
+ * otherwise it creates insecure credentials.
  */
 function gerServerCredentials(): grpc.ServerCredentials {
     const certificates: { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } = readTlsCertificates();
@@ -77,25 +67,14 @@ export function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, 
 }
 
 export async function cleanup() {
-    console.log('cleanup on error/exit');
     await stopGrpcServer();
 }
 
 export async function stopGrpcServer(): Promise<void> {
     try {
         await tryShutdownAsync?.();
-        console.log('gRPC server stopped');
     } catch (error) {
         console.error('Error while stopping server:', error);
-    }
-}
-
-export async function stopDB() {
-    try {
-        await disconnectMongo();
-        console.log(`Disconnected from DB`);
-    } catch (e) {
-        console.error(`Cannot close DB connection due to error: ` + e)
     }
 }
 

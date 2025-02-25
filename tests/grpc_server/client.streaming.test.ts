@@ -20,7 +20,7 @@ describe('gRPC Client Streaming Tests', () => {
     });
 
     afterAll(async () => {
-        client.close();
+        client?.close();
         await stopGrpcServer();
     });
 

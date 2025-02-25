@@ -16,7 +16,7 @@ export function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, 
         const privateKey = fs.readFileSync(path.join(certificatesFolder, 'server.pem'))
         return { rootCert, certChain, privateKey };
     } catch (e) {
-        console.log('Credentials not found, see error', e);
+        console.error('Credentials not found, see error', e);
         return {};
     }
 }

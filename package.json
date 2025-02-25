@@ -8,7 +8,7 @@
     "lint:eslint:fix": "eslint .  --config ./eslint.config.mjs --fix",
     "lint:tsconfig": "tsc --project tsconfig.json --noEmit",
     "lint": "npm run lint:eslint && npm run lint:tsconfig",
-    "test:server": "jest --config ./config/jest.config.js",
+    "test:server": "jest --config ./config/jest.config.js --runInBand",
     "start:server": "ts-node server/server.ts",
     "start:client": "make start",
     "mongo:docker": "docker compose up",

@@ -8,7 +8,7 @@ build_js
 build_py
 
 coverage/*
-.vscode
+.vscode/settings.json
 .env
 .venv
 __pycache__/

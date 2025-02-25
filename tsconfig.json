@@ -14,6 +14,7 @@
         "eslint.config.mjs",
         "config/jest.config.js",
         "proto",
+        "server/proto.ts",
     ],
     "exclude": [
         "client_old/**/*",

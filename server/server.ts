@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
-import { TransactionsService, ITransactionsServer } from '../proto';
+import { TransactionsService, ITransactionsServer } from './proto';
 import { transactionCommit } from './unary';
 import { transactionCommitWithSteps } from './server.streaming';
 import { transactionsCommit } from './client.streaming';

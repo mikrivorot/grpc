@@ -1,7 +1,7 @@
 
 import * as grpc from '@grpc/grpc-js';
 import { getGrpcClient, getChannelCredentials, readTlsCertificates } from '../utils';
-import { TransactionCommitRequest, TransactionCommitResponse, TransactionsClient, Amount, Status, RejectReasons } from '../../proto/index';
+import { TransactionCommitRequest, TransactionCommitResponse, TransactionsClient, Amount, Status, RejectReasons } from '../../server/proto';
 import { startGrpcServer, stopGrpcServer } from '../../server/server';
 import { MAX_AMOUNT, MIN_AMOUNT } from '../../server/constants';
 

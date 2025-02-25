@@ -1,5 +1,5 @@
 import { ServerUnaryCall, status } from '@grpc/grpc-js';
-import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from '../proto';
+import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from './proto';
 import { MIN_AMOUNT, MAX_AMOUNT } from './constants';
 
 export async function transactionCommit(call: ServerUnaryCall<TransactionCommitRequest, TransactionCommitResponse>, callback: any) {

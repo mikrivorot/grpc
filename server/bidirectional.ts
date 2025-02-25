@@ -1,5 +1,5 @@
 import { ServerDuplexStream } from '@grpc/grpc-js';
-import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from '../proto'
+import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from './proto'
 import { MIN_AMOUNT, MAX_AMOUNT } from './constants';
 
 export function bulkTransactionsCommit(call: ServerDuplexStream<TransactionCommitRequest, TransactionCommitResponse>): void {

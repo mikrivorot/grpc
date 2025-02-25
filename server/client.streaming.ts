@@ -1,5 +1,5 @@
 import { ServerReadableStream } from '@grpc/grpc-js';
-import { TransactionCommitRequest, TransactionsCommitResponse, Status } from '../proto'
+import { TransactionCommitRequest, TransactionsCommitResponse, Status } from './proto'
 import { MAX_AMOUNT, MIN_AMOUNT } from './constants';
 
 export async function transactionsCommit(call: ServerReadableStream<TransactionCommitRequest, TransactionsCommitResponse>, callback: any) {

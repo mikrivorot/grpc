@@ -1,5 +1,5 @@
 import { ServerWritableStream, status } from '@grpc/grpc-js';
-import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from '../proto';
+import { TransactionCommitRequest, TransactionCommitResponse, Status, RejectReasons } from './proto';
 import { MAX_AMOUNT, MIN_AMOUNT } from './constants';
 
 export async function transactionCommitWithSteps(call: ServerWritableStream<TransactionCommitRequest, TransactionCommitResponse>) {

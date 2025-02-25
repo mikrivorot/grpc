@@ -1,5 +1,5 @@
 export type Certificates = { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer }
-import { TransactionsClient } from '../proto';
+import { TransactionsClient } from '../server/proto';
 import * as grpc from '@grpc/grpc-js';
 import path from 'path';
 import * as fs from 'fs';

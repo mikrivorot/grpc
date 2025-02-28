@@ -10,7 +10,7 @@ let client: TransactionsClient;
 /**
  * Test cases for bidirectional streaming
  */
-describe.only('gRPC Bidirectional Streaming Tests', () => {
+describe('gRPC Bidirectional Streaming Tests', () => {
     beforeAll(async () => {
         await startGrpcServer();
         const clientCredentials = getChannelCredentials(readTlsCertificates());

@@ -1,7 +1,7 @@
 {
   "name": "proto-package",
   "version": "1.0.0",
-  "description": "Proto package with proto definitions to import into multiple microservices",
+  "description": "gRPC communication patterns between Python client and Node.js server with SSL/TLS security",
   "main": "index.js",
   "scripts": {
     "lint:eslint": "eslint .  --config ./eslint.config.mjs",
@@ -9,6 +9,7 @@
     "lint:tsconfig": "tsc --project tsconfig.json --noEmit",
     "lint": "npm run lint:eslint && npm run lint:tsconfig",
     "test:server": "jest --config ./config/jest.config.js --runInBand",
+    "test:client": "make test-client",
     "start:server": "ts-node server/server.ts",
     "start:client": "make start",
     "mongo:docker": "docker compose up",

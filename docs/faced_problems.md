@@ -1,3 +1,18 @@
+# Troubleshooting
+
+### Problem #0: Understand gRPC communication patterns
+Udemy course ["Complete Guide to Protocol Buffers 3 [Java, Golang, Python]"](https://www.udemy.com/course/protocol-buffers) - basics of gRPC
+
+Udemy course ["gRPC [Node.js] MasterClass: Build Modern API & Microservices"](https://www.udemy.com/course/grpc-nodejs) - Node.js gRPC specifics
+
+Just an [article about gRPC with NodeJS and TypeScript.](https://rsbh.dev/blogs/grpc-with-nodejs-typescript)
+
+Medium article ["Start Using UV Python Package Manager for Better Dependency"](https://medium.com/@gnetkov/start-using-uv-python-package-manager-for-better-dependency-management-183e7e428760)
+
+Medium article about [certificates generation](https://medium.com/@ankitgrg.26/generate-a-self-signed-certificate-for-grpc-java-56323df05be4) (I hate certificate generation)
+
+---
+
 ### Problem #1: wrong gRPC import in generated ts files
 
 https://rsbh.dev/blogs/grpc-with-nodejs-typescript just an article about gRPC with NodeJS and TypeScript.
@@ -34,7 +49,6 @@ instead of
 
 
 ---
-
 
 ### Problem #2 - incompatible protobuf versions
 `Detected incompatible Protobuf Gencode/Runtime versions when loading transactions.proto: gencode 5.29.0 runtime 5.28.0.`
@@ -79,6 +93,7 @@ Error received: 12 UNIMPLEMENTED: The server does not implement the method <meth
 ```
 
 ---
+
 ### Problem #4 - proper certificates generation
 https://medium.com/@ankitgrg.26/generate-a-self-signed-certificate-for-grpc-java-56323df05be4
 
@@ -113,14 +128,16 @@ openssl x509 -req -passin pass:1111 -days 365 -in server.csr -CA ca.crt -CAkey c
 openssl pkcs8 -topk8 -nocrypt -passin pass:1111 -in server.key -out server.pem
 ```
 
+---
 
-### Problem #5 - access mongo
+### Problem #5 - access mongo (not required in this project anymore as I removed mongo usage)
 
 ```
 docker exec -i -t <container_name> mongosh -u <username> -p <password>
 ```
 
+---
 
-### [IN PROGRESS] Problem #6 - outdated pydantic
+### [TODO] Problem #6 - outdated usage of Pydantic
 
 > Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'example'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.10/migration

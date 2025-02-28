@@ -94,11 +94,17 @@ This project demonstrates different gRPC communication patterns:
 
 - [tests/](tests/) - Tests for both gRPC server and client
 
-- [certificates/](certificates/) - SSL/TLS certificates for testing purposes (self-signed and excluded from Git)
-
 - [openapi.json](openapi.json) - OpenAPI schema for FastAPI
 
 - [Makefile](Makefile) - Makefile for building and running the project
+
+#### Folders and files not included in Git (auto-generated or should be added manually)
+- *certificates* - SSL/TLS certificates for testing purposes (self-signed and excluded from Git)
+- *build_ts* - TypeScript generated files
+- *build_py* - Python generated files
+- *.env* - Environment variables for local development
+- *.venv* - Virtual environment for local development
+- *node_modules* - Node.js dependencies
 
 
 ## Prerequisites
@@ -141,20 +147,23 @@ make start
 npm run start:client
 
 # Run client tests
-make test-unit
+make test-client
+# or
+npm run test:client
 ```
-
-## Swagger and exposed API
-TODO
 
 ## Security
 The communication is secured using SSL/TLS certificates. See [Faced Problems](./docs/faced_problems.md) for details about certificate generation and configuration.
 
 ## Additional Documentation
-- [UV Tool Usage](./docs/uv.md) Guide for using the UV package manager
+- [UV Tool Usage](./docs/uv.md) - Tiny guide for using the UV package manager
 
-- [Troubleshooting](./docs/faced_problems.md) - Common issues and solutions
+- [Troubleshooting](./docs/faced_problems.md) - Faced issues and applied solutions
 
-- [Additional Diagrams](./docs/another_diagram.md) - Another wat to render gRPC client<->server communication
+- [Sequence Diagrams](./docs/sequence_diagram.md) - Another way to render gRPC client<->server communication (via Sequence Diagram)
 
 - [VSCode configs](./.vscode/launch.json) - Some debug configurations for VSCode I used for debugging
+
+## Further steps
+- [.github/workflows.yaml](.github/workflows.yaml) - Github Actions workflow for CI/CD
+- observability

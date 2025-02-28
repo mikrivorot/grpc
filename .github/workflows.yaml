@@ -1,0 +1,43 @@
+# name: Test and Deploy
+
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up environment
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+#       - name: Install dependencies
+#         run: npm install
+#       - name: Run tests
+#         run: npm test
+
+#   deploy:
+#     needs: test # Only deploy if tests pass
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main' # Only deploy on main branch
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       # For Heroku deployment:
+#       - name: Deploy to Heroku
+#         uses: akhileshns/heroku-deploy@v3.12.14
+#         with:
+#           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#           heroku_app_name: 'your-app-name'
+#           heroku_email: 'your-email@example.com'
+
+#       # OR for Render deployment:
+#       # - name: Deploy to Render
+#       #   env:
+#       #     deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+#       #   run: |
+#       #     curl "$deploy_url"

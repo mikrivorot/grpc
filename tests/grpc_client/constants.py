@@ -8,5 +8,6 @@ class StatusCodes:
     SERVER_ERROR = 500
 
 class Messages:
+    START_MESSAGE = "Transaction started"
     COMMIT_SUCCESS = "Transaction committed successfully"
     PROCESSING = "Processing transaction"

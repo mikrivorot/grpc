@@ -1,0 +1,353 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/transaction/commit": {
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Commit a transaction",
+        "description": "Commits a transaction with the provided details. If the amount is higher than 100 or lower than 10, the transaction will be refused",
+        "operationId": "transaction_commit_transaction_commit_post",
+        "parameters": [
+          {
+            "name": "with_steps",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, returns response with execution steps",
+              "default": false,
+              "title": "With Steps"
+            },
+            "description": "If true, returns response with execution steps"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionCommitRequestDTO",
+                "description": "Transaction details to commit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse_Union_TransactionCommitResponseDTO__List_TransactionCommitResponseDTO___"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction/commit/bulk": {
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Commit multiple transactions",
+        "description": "Commits multiple transactions in a single request. If the amount is higher than 100 or lower than 10, the transaction will be refused. If `response_per_request` is true, response will be returned per transaction in request",
+        "operationId": "transactions_commit_transaction_commit_bulk_post",
+        "parameters": [
+          {
+            "name": "response_per_request",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, response wil be returned per transaction in request",
+              "default": false,
+              "title": "Response Per Request"
+            },
+            "description": "If true, response wil be returned per transaction in request"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TransactionCommitRequestDTO"
+                },
+                "description": "Array of transactions to commit",
+                "title": "Transactions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse_Union_TransactionsCommitResponseDTO__List_TransactionCommitResponseDTO___"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Redirect Docs",
+        "operationId": "redirect_docs__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APIResponse_Union_TransactionCommitResponseDTO__List_TransactionCommitResponseDTO___": {
+        "properties": {
+          "response": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransactionCommitResponseDTO"
+              },
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TransactionCommitResponseDTO"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Response"
+          },
+          "statusCode": {
+            "type": "integer",
+            "title": "Statuscode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "response",
+          "statusCode"
+        ],
+        "title": "APIResponse[Union[TransactionCommitResponseDTO, List[TransactionCommitResponseDTO]]]"
+      },
+      "APIResponse_Union_TransactionsCommitResponseDTO__List_TransactionCommitResponseDTO___": {
+        "properties": {
+          "response": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransactionsCommitResponseDTO"
+              },
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TransactionCommitResponseDTO"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Response"
+          },
+          "statusCode": {
+            "type": "integer",
+            "title": "Statuscode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "response",
+          "statusCode"
+        ],
+        "title": "APIResponse[Union[TransactionsCommitResponseDTO, List[TransactionCommitResponseDTO]]]"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "TransactionCommitRequestDTO": {
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "exclusiveMaximum": 100.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Amount",
+            "description": "Transaction amount",
+            "example": 10
+          },
+          "user_id": {
+            "type": "integer",
+            "title": "User Id",
+            "description": "ID of the user initiating the transaction",
+            "example": 1
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "title": "Currency",
+            "description": "Currency code",
+            "example": "EUR"
+          }
+        },
+        "type": "object",
+        "required": [
+          "amount",
+          "user_id",
+          "currency"
+        ],
+        "title": "TransactionCommitRequestDTO"
+      },
+      "TransactionCommitResponseDTO": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus",
+            "example": "COMMITTED"
+          },
+          "message": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Message",
+            "example": [
+              "Transaction committed successfully"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message"
+        ],
+        "title": "TransactionCommitResponseDTO"
+      },
+      "TransactionStatus": {
+        "type": "string",
+        "enum": [
+          "COMMITTED",
+          "PROCESSING",
+          "REFUSED"
+        ],
+        "title": "TransactionStatus"
+      },
+      "TransactionsCommitResponseDTO": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus",
+            "example": "COMMITTED"
+          },
+          "message": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Message",
+            "example": [
+              "Transaction committed successfully"
+            ]
+          },
+          "refused_transactions": {
+            "type": "integer",
+            "title": "Refused Transactions",
+            "description": "Total amount of refused transactions",
+            "example": 10
+          },
+          "transferred_amount": {
+            "type": "integer",
+            "title": "Transferred Amount",
+            "description": "Total sum of successfully committed transactions",
+            "example": 10
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "refused_transactions",
+          "transferred_amount"
+        ],
+        "title": "TransactionsCommitResponseDTO"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

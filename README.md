@@ -1,6 +1,19 @@
 # gRPC Communication Example
 A demonstration of gRPC communication patterns between Python client and Node.js server with SSL/TLS security.
 
+## API Interaction
+Users can trigger gRPC communications through these REST endpoints exposed by FastAPI:
+
+1. **Single Transaction** (`POST /transaction/commit`)
+   - Regular mode: Single request/response **->** triggers unary gRPC call
+   - With steps mode: query pareameter `with_steps=true` for detailed transaction steps **->** trigger server-streaming gRPC call
+
+2. **Bulk Transactions** (`POST /transaction/commit/bulk`)
+   - Regular mode: Processes multiple transactions **->** trigger client-streaming gRPC call
+   - Per-request mode: `?response_per_request=true` for individual transaction responses **->** trigger bidirectional gRPC call
+
+![alt text](image.png)
+
 
 ## Architecture Diagram
 
@@ -57,6 +70,7 @@ graph TB
 
 ```
 
+
 ## Overview
 This project demonstrates different gRPC communication patterns:
 
@@ -70,20 +84,26 @@ This project demonstrates different gRPC communication patterns:
 
 
 ## Project Structure
-- [server/](server/) - Node.js gRPC server (TypeScript)
+- [server/](server/) - Node.js gRPC server written on TypeScript
 
-- [client/](client/) - Fast API gRPC client (Python)
+- [client/](client/) - gRPC client written on Python with FastAPI to have REST API endpoints exposed
 
-- [proto/](proto/) - Protobuf definitions
+- [proto/](proto/) - Protobuf definitions split into two files
 
-- [docs/](docs/) - Documentation
+- [docs/](docs/) - Documentation files
 
-- [tests/](tests/) - Tests
+- [tests/](tests/) - Tests for both gRPC server and client
+
+- [certificates/](certificates/) - SSL/TLS certificates for testing purposes (self-signed and excluded from Git)
+
+- [openapi.json](openapi.json) - OpenAPI schema for FastAPI
+
+- [Makefile](Makefile) - Makefile for building and running the project
 
 
 ## Prerequisites
 
-Node.js (v14+), Python (v3.8+), UV package manager, `Make`
+Node.js (v14+), Python (v3.8+), UV package manager, Make
 
 ## Getting Started
 
@@ -124,6 +144,8 @@ npm run start:client
 make test-unit
 ```
 
+## Swagger and exposed API
+TODO
 
 ## Security
 The communication is secured using SSL/TLS certificates. See [Faced Problems](./docs/faced_problems.md) for details about certificate generation and configuration.

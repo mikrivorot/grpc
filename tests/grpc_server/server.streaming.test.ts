@@ -1,5 +1,5 @@
 import { startGrpcServer, stopGrpcServer } from '../../server/server';
-import { getChannelCredentials, getGrpcClient, readTlsCertificates } from '../utils';
+import { getChannelCredentials, getGrpcClient, readTlsCertificates } from './utils';
 import { TransactionCommitResponse, TransactionCommitRequest, Amount, TransactionsClient, RejectReasons, Status } from '../../server/proto';
 import { MAX_AMOUNT, MIN_AMOUNT } from '../../server/constants';
 

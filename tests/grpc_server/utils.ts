@@ -1,5 +1,5 @@
 export type Certificates = { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer }
-import { TransactionsClient } from '../server/proto';
+import { TransactionsClient } from '../../server/proto';
 import * as grpc from '@grpc/grpc-js';
 import path from 'path';
 import * as fs from 'fs';
@@ -10,7 +10,7 @@ const options = {
 
 export function readTlsCertificates(): { rootCert?: Buffer, certChain?: Buffer, privateKey?: Buffer } | {} {
     try {
-        const certificatesFolder = path.join(__dirname, '../certificates');
+        const certificatesFolder = path.join(__dirname, '../../certificates');
         const rootCert = fs.readFileSync(path.join(certificatesFolder, 'ca.crt'));
         const certChain = fs.readFileSync(path.join(certificatesFolder, 'server.crt'));
         const privateKey = fs.readFileSync(path.join(certificatesFolder, 'server.pem'))

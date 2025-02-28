@@ -6,11 +6,11 @@ Users can trigger gRPC communications through these REST endpoints exposed by Fa
 
 1. **Single Transaction** (`POST /transaction/commit`)
    - Regular mode: Single request/response **->** triggers unary gRPC call
-   - With steps mode: query pareameter `with_steps=true` for detailed transaction steps **->** trigger server-streaming gRPC call
+   - With steps mode: query parameter `with_steps=true` for detailed transaction steps **->** trigger server-streaming gRPC call
 
 2. **Bulk Transactions** (`POST /transaction/commit/bulk`)
    - Regular mode: Processes multiple transactions **->** trigger client-streaming gRPC call
-   - Per-request mode: `?response_per_request=true` for individual transaction responses **->** trigger bidirectional gRPC call
+   - Per-request mode: query parameter `response_per_request=true` for individual transaction responses **->** trigger bidirectional gRPC call
 
 ![alt text](image.png)
 

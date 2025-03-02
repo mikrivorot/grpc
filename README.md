@@ -153,7 +153,7 @@ npm run test:client
 ```
 
 ## Security
-The communication is secured using SSL/TLS certificates. See [Faced Problems](./docs/faced_problems.md) for details about certificate generation and configuration.
+The communication is secured using SSL/TLS certificates. See [certificates generation](./docs/faced_problems.md#problem-4---proper-certificates-generation) in [faced Problems](./docs/faced_problems.md) for details about certificates generation and configuration.
 
 ## Additional Documentation
 - [UV Tool Usage](./docs/uv.md) - Tiny guide for using the UV package manager
